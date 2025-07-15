@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rare Service - Your Digital Growth Partner</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Three.js for 3D animation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <style>
+        /* Custom styles for a polished look */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000000;
+            background-image: radial-gradient(circle at top, rgba(160, 32, 240, 0.15), transparent 50%);
+            color: #e5e7eb;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary {
+             @apply bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-gray-500/50;
+        }
+        .section-title {
+            @apply text-4xl md:text-5xl font-extrabold text-center mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500;
+        }
+        .section-subtitle {
+            @apply text-center text-gray-400 mb-12 max-w-2xl mx-auto;
+        }
+        /* Star rating styles */
+        .star-rating .fa-star {
+            color: #4b5563; /* gray-600 */
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .star-rating .fa-star:hover,
+        .star-rating .fa-star:hover ~ .fa-star {
+            color: #f59e0b; /* amber-500 */
+        }
+        .star-rating:hover .fa-star {
+            color: #f59e0b;
+        }
+        .star-rating .fa-star.selected {
+            color: #f59e0b;
+        }
+
+        /* Animation Styles */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .page {
+            transition: opacity 0.4s ease-in-out;
+        }
+        .page.fade-out {
+            opacity: 0;
+        }
+        header {
+            transition: background-color 0.3s ease-in-out;
+        }
+        header.scrolled {
+            background: rgba(10, 10, 10, 0.8);
+        }
+        
+        /* Loader Styles */
+        #loader {
+            transition: opacity 0.5s ease-in-out;
+        }
+        #loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .loader-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-top-color: #3b82f6; /* blue-500 */
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Initially hide main app content */
+        #app {
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        #app.loaded {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        /* 3D Canvas style */
+        #bg-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        .hero-section {
+            position: relative;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Loader -->
+    <div id="loader" class="fixed inset-0 bg-black z-[100] flex flex-col items-center justify-center">
+        <div class="text-center">
+             <img src="https://res.cloudinary.com/deoge9dph/image/upload/v1752509474/khane_w6blfh.png" alt="Rare Service Logo" class="h-24 w-24 mx-auto mb-6 rounded-2xl animate-pulse object-cover">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-white tracking-wider mb-8">
+                Rare Service
+            </h1>
+            <div class="loader-spinner"></div>
+        </div>
+    </div>
+
+
+    <!-- App Container -->
+    <div id="app" class="min-h-screen">
+
+        <!-- Header -->
+        <header class="sticky top-0 z-50 glass-card shadow-lg">
+            <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+                <a href="#" onclick="showPage('home')" class="text-2xl font-bold text-white tracking-wider flex items-center">
+                    <img src="https://res.cloudinary.com/deoge9dph/image/upload/v1752509474/khane_w6blfh.png" alt="Rare Service Logo" class="h-9 w-9 mr-3 rounded-lg object-cover">
+                    <span>Rare Service</span>
+                </a>
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="#" onclick="showPage('home')" class="text-gray-300 hover:text-white transition">Home</a>
+                    <a href="https://rare1848.github.io/rareinfo/" target="_blank" class="text-gray-300 hover:text-white transition">About Us</a>
+                    <div class="relative group">
+                        <button class="text-gray-300 hover:text-white transition flex items-center">
+                            Services <i class="fas fa-chevron-down ml-2 text-xs"></i>
+                        </button>
+                        <div class="absolute hidden group-hover:block bg-gray-800 rounded-lg shadow-lg py-2 w-56 mt-2">
+                            <a href="#" onclick="showPage('social-media')" class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white">Social Media Ads</a>
+                            <a href="#" onclick="showPage('product-desc')" class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white">Product Descriptions</a>
+                            <a href="#" onclick="showPage('website-creation')" class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white">Website Creation</a>
+                            <a href="#" onclick="showPage('discord')" class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white">Discord Management</a>
+                        </div>
+                    </div>
+                    <a href="#reviews" class="text-gray-300 hover:text-white transition">Reviews</a>
+                    <a href="#contact" class="text-gray-300 hover:text-white transition">Contact</a>
+                </nav>
+                <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none ml-4">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+                <a href="#" onclick="showPage('home'); toggleMobileMenu();" class="block py-2 text-gray-300 hover:text-white">Home</a>
+                <a href="https://rare1848.github.io/rareinfo/" target="_blank" onclick="toggleMobileMenu()" class="block py-2 text-gray-300 hover:text-white">About Us</a>
+                <h4 class="text-gray-500 font-bold mt-2">Services</h4>
+                <a href="#" onclick="showPage('social-media'); toggleMobileMenu();" class="block py-2 pl-4 text-gray-300 hover:text-white">Social Media Ads</a>
+                <a href="#" onclick="showPage('product-desc'); toggleMobileMenu();" class="block py-2 pl-4 text-gray-300 hover:text-white">Product Descriptions</a>
+                <a href="#" onclick="showPage('website-creation'); toggleMobileMenu();" class="block py-2 pl-4 text-gray-300 hover:text-white">Website Creation</a>
+                <a href="#" onclick="showPage('discord'); toggleMobileMenu();" class="block py-2 pl-4 text-gray-300 hover:text-white">Discord Management</a>
+                <a href="#reviews" onclick="toggleMobileMenu()" class="block py-2 text-gray-300 hover:text-white">Reviews</a>
+                <a href="#contact" onclick="toggleMobileMenu()" class="block py-2 text-gray-300 hover:text-white">Contact</a>
+            </div>
+        </header>
+
+        <main>
+            <!-- Home Page Section -->
+            <div id="home-page" class="page">
+                <section class="hero-section pt-20 md:pt-32 pb-8">
+                    <div class="container mx-auto px-6 text-center relative z-10">
+                        <h1 class="text-5xl md:text-7xl font-extrabold text-white leading-tight mb-6 animate-on-scroll">
+                            Elevate Your Brand with <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">Rare Services</span>
+                        </h1>
+                        <p class="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-10 animate-on-scroll" style="transition-delay: 150ms;">
+                            We provide elite social media advertising and compelling product descriptions to make your brand shine. Discover the difference expertise makes.
+                        </p>
+                        <div class="flex justify-center items-center space-x-4 animate-on-scroll" style="transition-delay: 300ms;">
+                           <button onclick="showPage('social-media')" class="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/50">Explore Ad Services</button>
+                           <button onclick="showPage('product-desc')" class="btn-secondary">View Writing Services</button>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="pb-20">
+                    <div class="container mx-auto px-6">
+                        <h2 class="section-title animate-on-scroll">Our Core Services</h2>
+                        <p class="section-subtitle animate-on-scroll" style="transition-delay: 150ms;">Choose a service to see our tailored packages and find the perfect fit for your business goals.</p>
+                        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto mt-8">
+                            <!-- Social Media Card -->
+                            <div class="glass-card p-8 text-center hover:border-blue-400 transition-all duration-300 transform hover:-translate-y-2 animate-on-scroll">
+                                <i class="fas fa-bullhorn text-5xl text-blue-400 mb-4"></i>
+                                <h3 class="text-2xl font-bold text-white mb-3">Social Media Advertising</h3>
+                                <p class="text-gray-400 mb-6">Targeted campaigns across major platforms to boost your reach, engagement, and conversions.</p>
+                                <button onclick="showPage('social-media')" class="font-semibold text-blue-400 hover:text-blue-300 transition">Learn More <i class="fas fa-arrow-right ml-2"></i></button>
+                            </div>
+                            <!-- Product Description Card -->
+                            <div class="glass-card p-8 text-center hover:border-purple-400 transition-all duration-300 transform hover:-translate-y-2 animate-on-scroll" style="transition-delay: 150ms;">
+                                <i class="fas fa-pencil-alt text-5xl text-purple-400 mb-4"></i>
+                                <h3 class="text-2xl font-bold text-white mb-3">Product Descriptions</h3>
+                                <p class="text-gray-400 mb-6">SEO-optimized, persuasive copy that turns browsers into buyers and climbs search rankings.</p>
+                                <button onclick="showPage('product-desc')" class="font-semibold text-purple-400 hover:text-purple-300 transition">Learn More <i class="fas fa-arrow-right ml-2"></i></button>
+                            </div>
+                            <!-- Website Creation Card -->
+                            <div class="glass-card p-8 text-center hover:border-green-400 transition-all duration-300 transform hover:-translate-y-2 animate-on-scroll" style="transition-delay: 300ms;">
+                                <i class="fas fa-laptop-code text-5xl text-green-400 mb-4"></i>
+                                <h3 class="text-2xl font-bold text-white mb-3">Website Creation</h3>
+                                <p class="text-gray-400 mb-6">Responsive, mobile-friendly websites with admin panels and e-commerce solutions.</p>
+                                <button onclick="showPage('website-creation')" class="font-semibold text-green-400 hover:text-green-300 transition">Learn More <i class="fas fa-arrow-right ml-2"></i></button>
+                            </div>
+                             <!-- Discord Management Card -->
+                            <div class="glass-card p-8 text-center hover:border-indigo-400 transition-all duration-300 transform hover:-translate-y-2 animate-on-scroll" style="transition-delay: 450ms;">
+                                <i class="fab fa-discord text-5xl text-indigo-400 mb-4"></i>
+                                <h3 class="text-2xl font-bold text-white mb-3">Discord Management</h3>
+                                <p class="text-gray-400 mb-6">Professional server setup and management to build and grow your community.</p>
+                                <button onclick="showPage('discord')" class="font-semibold text-indigo-400 hover:text-indigo-300 transition">Learn More <i class="fas fa-arrow-right ml-2"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Social Media Advertising Page -->
+            <div id="social-media-page" class="page hidden">
+                <section class="py-20">
+                    <div class="container mx-auto px-6">
+                        <h2 class="section-title animate-on-scroll">Social Media Advertising</h2>
+                        <p class="section-subtitle animate-on-scroll" style="transition-delay: 150ms;">Powerful ad strategies to connect you with your ideal audience on the world's most popular platforms.</p>
+                        <div class="flex justify-center items-center space-x-4 md:space-x-8 mb-12 text-3xl text-gray-400 animate-on-scroll" style="transition-delay: 300ms;">
+                            <i class="fab fa-youtube" title="YouTube"></i>
+                            <i class="fab fa-instagram" title="Instagram"></i>
+                            <i class="fab fa-facebook" title="Facebook"></i>
+                            <i class="fab fa-tiktok" title="TikTok"></i>
+                            <i class="fab fa-twitter" title="Twitter (X)"></i>
+                        </div>
+                        <!-- Pricing Tiers -->
+                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            <!-- Starter -->
+                            <div id="starter-card" class="glass-card p-8 flex flex-col animate-on-scroll">
+                                <h3 class="text-xl font-bold text-blue-400 mb-2">Starter Ads Setup</h3>
+                                <p class="text-4xl font-extrabold text-white mb-4">$<span id="starter-price">60</span></p>
+                                <p class="text-gray-400 mb-6 min-h-[70px]">Advanced ad campaigns with audience targeting, <span id="starter-delivery">4-day delivery</span>.</p>
+                                <div class="mb-6">
+                                    <label for="fast-delivery-starter" class="flex items-center cursor-pointer">
+                                        <input type="checkbox" id="fast-delivery-starter" onchange="toggleFastDelivery('starter', this)" class="form-checkbox h-5 w-5 text-blue-500 rounded">
+                                        <span class="ml-3 text-white">Fast Delivery (3 days) <span class="text-green-400 font-bold">+ $15</span></span>
+                                    </label>
+                                </div>
+                                <ul class="space-y-4 text-gray-300 mb-8 flex-grow">
+                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>2 platforms, 10,000+ people</li>
+                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>Engagement with prospects</li>
+                                </ul>
+                                <button id="starter-button" onclick="showPaymentModal('Starter Ads Setup', 60, 'https://skrill.me/rq/Nisar%20Ud/60/USD?key=1VDpundqNXS3XPYlg8hxEAGo7zC')" class="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/50 mt-auto">Get Started</button>
+                            </div>
+                            <!-- Standard -->
+                            <div id="growth-card" class="glass-card p-8 flex flex-col border-2 border-blue-500 shadow-2xl shadow-blue-500/20 transform md:scale-105 animate-on-scroll" style="transition-delay: 150ms;">
+                                <p class="text-center font-bold text-white bg-blue-500 rounded-full py-1 px-4 -mt-12 mx-auto">Most Popular</p>
+                                <h3 class="text-xl font-bold text-blue-400 mb-2 mt-4">Growth Accelerator</h3>
+                                <p class="text-4xl font-extrabold text-white mb-4">$<span id="growth-price">170</span></p>
+                                <p class="text-gray-400 mb-6 min-h-[70px]">Run targeted ad campaigns + 2 custom images + ad copy + <span id="growth-delivery">4‑day management</span>.</p>
+                                <div class="mb-6">
+                                    <label for="fast-delivery-growth" class="flex items-center cursor-pointer">
+                                        <input type="checkbox" id="fast-delivery-growth" onchange="toggleFastDelivery('growth', this)" class="form-checkbox h-5 w-5 text-blue-500 rounded">
+                                        <span class="ml-3 text-white">Fast Delivery (3 days) <span class="text-green-400 font-bold">+ $15</span></span>
+                                    </label>
+                                </div>
+                                <ul class="space-y-4 text-gray-300 mb-8 flex-grow">
+                                     <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>4 platforms</li>
+                                     <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>50,000+ people</li>
+                                     <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>Content creation</li>
+                                </ul>
+                                <button id="growth-button" onclick="showPaymentModal('Growth Accelerator', 170, 'https://skrill.me/rq/Nisar%20Ud/170/USD?key=_DFkSpAHspH9D4X_se04ufxp7HS')" class="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/50 mt-auto">Choose Plan</button>
+                            </div>
+                            <!-- Premium -->
+                            <div id="pro-card" class="glass-card p-8 flex flex-col animate-on-scroll" style="transition-delay: 300ms;">
+                                <h3 class="text-xl font-bold text-blue-400 mb-2">Brand Reach Pro</h3>
+                                <p class="text-4xl font-extrabold text-white mb-4">$<span id="pro-price">325</span></p>
+                                <p class="text-gray-400 mb-6 min-h-[70px]">Complete Funnel Targeting + 4 Tailored Ad Images + <span id="pro-delivery">4-day delivery</span> + 10‑Days Expert Oversight.</p>
+                                <div class="mb-6">
+                                    <label for="fast-delivery-pro" class="flex items-center cursor-pointer">
+                                        <input type="checkbox" id="fast-delivery-pro" onchange="toggleFastDelivery('pro', this)" class="form-checkbox h-5 w-5 text-blue-500 rounded">
+                                        <span class="ml-3 text-white">Fast Delivery (3 days) <span class="text-green-400 font-bold">+ $15</span></span>
+                                    </label>
+                                </div>
+                                <ul class="space-y-4 text-gray-300 mb-8 flex-grow">
+                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>8 platforms</li>
+                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>100,000+ people</li>
+                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>Content creation</li>
+                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>Engagement with prospects</li>
+                                </ul>
+                                <button id="pro-button" onclick="showPaymentModal('Brand Reach Pro', 325, 'https://skrill.me/rq/Nisar%20Ud/325/USD?key=wDg-m8alxlsEFlAvAciKXcLoaA0')" class="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/50 mt-auto">Go Pro</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            
+            <!-- Product Description Page -->
+            <div id="product-desc-page" class="page hidden">
+                <section class="py-20">
+                    <div class="container mx-auto px-6">
+                        <h2 class="section-title animate-on-scroll">Product Description Writing</h2>
+                        <p class="section-subtitle animate-on-scroll" style="transition-delay: 150ms;">Compelling, SEO-driven product descriptions that captivate customers and drive sales.</p>
+                        <!-- Pricing Tiers -->
+                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
+                            <!-- Basic -->
+                            <div class="glass-card p-8 flex flex-col animate-on-scroll">
+                                <h3 class="text-xl font-bold text-purple-400 mb-2">📝 Simple Writing for Shortlisting</h3>
+                                <p class="text-4xl font-extrabold text-white mb-4">$10</p>
+                                <p class="text-gray-400 mb-6 min-h-[50px]">Includes title, 5 bullets, and a description for your book or listing.</p>
+                                <ul class="space-y-4 text-gray-300 mb-8 flex-grow">
+                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>1-day delivery</li>
+                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>1 product description</li>
+                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>1 title included (per product)</li>
+                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>5 bulletpoint included (per product)</li>
+                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>500 words included (per product)</li>
+                                </ul>
+                                <button onclick="showPaymentModal('Simple Writing for Shortlisting', 10, 'https://skrill.me/rq/Nisar%20Ud/10/USD?key=6QrMz1QNhUHOJYBbn0qjaOWJrAW')" class="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/50 mt-auto">Get Started</button>
+                            </div>
+                            <!-- Standard -->
+                            <div id="product-standard-card" class="glass-card p-8 flex flex-col border-2 border-purple-500 shadow-2xl shadow-purple-500/20 transform md:scale-105 animate-on-scroll" style="transition-delay: 150ms;">
+                                <p class="text-center font-bold text-white bg-purple-500 rounded-full py-1 px-4 -mt-12 mx-auto">Most Popular</p>
+                                <h3 class="text-xl font-bold text-purple-400 mb-2 mt-4">🛍️ Product Listing & Improvement</h3>
+                                <p class="text-4xl font-extrabold text-white mb-4">$<span id="product-standard-price">20</span></p>
+                                <p class="text-gray-400 mb-6 min-h-[50px]">SEO title, 5 bullet points, detailed description, and backend SEO terms.</p>
+                                <div class="mb-6">
+                                    <label for="fast-delivery-product-standard" class="flex items-center cursor-pointer">
+                                        <input type="checkbox" id="fast-delivery-product-standard" onchange="toggleFastDelivery('product-standard', this)" class="form-checkbox h-5 w-5 text-purple-500 rounded">
+                                        <span class="ml-3 text-white">Fast Delivery (1 day) <span class="text-green-400 font-bold">+ $10</span></span>
+                                    </label>
+                                </div>
+                                <ul class="space-y-4 text-gray-300 mb-8 flex-grow">
+                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i><span id="product-standard-delivery">2-day delivery</span></li>
+                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>1 Revision</li>
+                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>5 product descriptions</li>
+                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>1 title included (per product)</li>
+                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>5 bulletpoint included (per product)</li>
+                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>800 words included (per product)</li>
+                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>Competitor research</li>
+                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>HTML title</li>
+                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>SEO Keyword Research</li>
+                                </ul>
+                                <button id="product-standard-button" onclick="showPaymentModal('Product Listing & Improvement', 20, 'https://skrill.me/rq/Nisar%20Ud/20/USD?key=tkKjTlqtP8fMhiH8Fx4MIdZ0_Ln')" class="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/50 mt-auto">Choose Plan</button>
+                            </div>
+                            <!-- Premium -->
+                            <div id="product-premium-card" class="glass-card p-8 flex flex-col animate-on-scroll" style="transition-delay: 300ms;">
+                                <h3 class="text-xl font-bold text-purple-400 mb-2">🎯 Listing Boost + Extra Perks</h3>
+                                <p class="text-4xl font-extrabold text-white mb-4">$<span id="product-premium-price">25</span></p>
+                                <p class="text-gray-400 mb-6 min-h-[50px]">Full SEO Listing, Title, Bullets, Description, Backend & PPC Keywords + Bonuses.</p>
+                                <div class="mb-6">
+                                    <label for="fast-delivery-product-premium" class="flex items-center cursor-pointer">
+                                        <input type="checkbox" id="fast-delivery-product-premium" onchange="toggleFastDelivery('product-premium', this)" class="form-checkbox h-5 w-5 text-purple-500 rounded">
+                                        <span class="ml-3 text-white">Fast Delivery (2 days) <span class="text-green-400 font-bold">+ $10</span></span>
+                                    </label>
+                                </div>
+                                <ul class="space-y-4 text-gray-300 mb-8 flex-grow">
+                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i><span id="product-premium-delivery">3-day delivery</span></li>
+                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>1 Revision</li>
+                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>10 product descriptions</li>
+                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>1 title included (per product)</li>
+                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>5 bulletpoint included (per product)</li>
+                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>1,100 words included (per product)</li>
+                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>Competitor research</li>
+                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>HTML title</li>
+                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>SEO keywords</li>
+                                </ul>
+                                <button id="product-premium-button" onclick="showPaymentModal('Listing Boost + Extra Perks', 25, 'https://skrill.me/rq/Nisar%20Ud/25/USD?key=KNminP-egUoMX_2Cxw4OPH4UNDH')" class="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/50 mt-auto">Go Pro</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Website Creation Page -->
+            <div id="website-creation-page" class="page hidden">
+                <section class="py-20">
+                    <div class="container mx-auto px-6">
+                        <h2 class="section-title animate-on-scroll">Website Creation</h2>
+                        <p class="section-subtitle animate-on-scroll" style="transition-delay: 150ms;">Get a professional, responsive website with a full admin panel and e-commerce capabilities to grow your online presence.</p>
+                        <!-- Pricing Tiers -->
+                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
+                            <!-- Basic -->
+                            <div class="glass-card p-8 flex flex-col animate-on-scroll">
+                                <h3 class="text-xl font-bold text-green-400 mb-2">Basic</h3>
+                                <p class="text-4xl font-extrabold text-white mb-4">$15</p>
+                                <p class="text-gray-400 mb-6 min-h-[70px]">Responsive Website with admin panel. Upto 3 Pages website + Mobile Friendly + Admin Panel + Plugins + Video Tutorial + Contact form.</p>
+                                <ul class="space-y-4 text-gray-300 mb-8 flex-grow">
+                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>3 days delivery</li>
+                                </ul>
+                                <button onclick="showPaymentModal('Website Creation - Basic', 15, 'https://skrill.me/rq/Nisar%20Ud/15/USD?key=sTwYvpJYw4Q40heJTDLrPzby-nH')" class="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/50 mt-auto">Get Started</button>
+                            </div>
+                            <!-- Standard -->
+                            <div class="glass-card p-8 flex flex-col border-2 border-green-500 shadow-2xl shadow-green-500/20 transform md:scale-105 animate-on-scroll" style="transition-delay: 150ms;">
+                                <p class="text-center font-bold text-white bg-green-500 rounded-full py-1 px-4 -mt-12 mx-auto">Most Popular</p>
+                                <h3 class="text-xl font-bold text-green-400 mb-2 mt-4">Standard</h3>
+                                <p class="text-4xl font-extrabold text-white mb-4">$30</p>
+                                <p class="text-gray-400 mb-6 min-h-[70px]">I will create mobile & tablet friendly wordpress responsive website for you with admin panel.</p>
+                                <ul class="space-y-4 text-gray-300 mb-8 flex-grow">
+                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>4 days delivery</li>
+                                </ul>
+                                <button onclick="showPaymentModal('Website Creation - Standard', 30, 'https://skrill.me/rq/Nisar%20Ud/30/USD?key=gxJlkfOOejB0-k-yXh_-F0xf1yJ')" class="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/50 mt-auto">Choose Plan</button>
+                            </div>
+                            <!-- Premium -->
+                            <div class="glass-card p-8 flex flex-col animate-on-scroll" style="transition-delay: 300ms;">
+                                <h3 class="text-xl font-bold text-green-400 mb-2">Premium</h3>
+                                <p class="text-4xl font-extrabold text-white mb-4">$60</p>
+                                <p class="text-gray-400 mb-6 min-h-[70px]">Standard Package + ecommerce online store(paypal) integration and 1 week support. 10 pages max.</p>
+                                <ul class="space-y-4 text-gray-300 mb-8 flex-grow">
+                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>10 days delivery</li>
+                                </ul>
+                                <button onclick="showPaymentModal('Website Creation - Premium', 60, 'https://skrill.me/rq/Nisar%20Ud/60/USD?key=0OPx1Q63oAfGnUG8jCwmpG7Omuj')" class="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/50 mt-auto">Go Pro</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Discord Management Page -->
+            <div id="discord-page" class="page hidden">
+                <section class="py-20">
+                    <div class="container mx-auto px-6">
+                        <h2 class="section-title animate-on-scroll">Discord Server Management</h2>
+                        <p class="section-subtitle animate-on-scroll" style="transition-delay: 150ms;">Expert setup and management for a secure, engaging, and professional Discord server tailored to your community.</p>
+                        <!-- Pricing Tiers -->
+                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
+                            <!-- Basic -->
+                            <div class="glass-card p-8 flex flex-col animate-on-scroll">
+                                <h3 class="text-xl font-bold text-indigo-400 mb-2">Basic</h3>
+                                <p class="text-4xl font-extrabold text-white mb-4">$5</p>
+                                <ul class="space-y-4 text-gray-300 mb-8 flex-grow">
+                                    <li class="flex items-start"><i class="fas fa-check-circle text-green-400 mr-3 mt-1"></i><span>1-day delivery</span></li>
+                                    <li class="flex items-start"><i class="fas fa-check-circle text-green-400 mr-3 mt-1"></i><span>Custom Voice/Text Channels</span></li>
+                                    <li class="flex items-start"><i class="fas fa-check-circle text-green-400 mr-3 mt-1"></i><span>Unlimited Roles & Permissions Setup</span></li>
+                                    <li class="flex items-start"><i class="fas fa-check-circle text-green-400 mr-3 mt-1"></i><span>Auto Moderation Bots</span></li>
+                                    <li class="flex items-start"><i class="fas fa-check-circle text-green-400 mr-3 mt-1"></i><span>Welcome image with text</span></li>
+                                    <li class="flex items-start"><i class="fas fa-check-circle text-green-400 mr-3 mt-1"></i><span>Music Bot & Channel</span></li>
+                                    <li class="flex items-start"><i class="fas fa-check-circle text-green-400 mr-3 mt-1"></i><span>Server Stats & Audit Log</span></li>
+                                    <li class="flex items-start"><i class="fas fa-check-circle text-green-400 mr-3 mt-1"></i><span>Auto Twitter/YouTube/Twitch Alerts</span></li>
+                                    <li class="flex items-start"><i class="fas fa-check-circle text-green-400 mr-3 mt-1"></i><span>Private Staff Area</span></li>
+                                    <li class="flex items-start"><i class="fas fa-check-circle text-green-400 mr-3 mt-1"></i><span>Giveaway & Polling System</span></li>
+                                </ul>
+                                <button onclick="showPaymentModal('Discord Basic', 5, 'https://skrill.me/rq/Nisar%20Ud/5/USD?key=9zURoUta8juRiVuc-5GJN7feh78')" class="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/50 mt-auto">Get Started</button>
+                            </div>
+                            <!-- Standard -->
+                            <div id="discord-standard-card" class="glass-card p-8 flex flex-col border-2 border-indigo-500 shadow-2xl shadow-indigo-500/20 transform md:scale-105 animate-on-scroll" style="transition-delay: 150ms;">
+                                <p class="text-center font-bold text-white bg-indigo-500 rounded-full py-1 px-4 -mt-12 mx-auto">Most Popular</p>
+                                <h3 class="text-xl font-bold text-indigo-400 mb-2 mt-4">Standard</h3>
+                                <p class="text-4xl font-extrabold text-white mb-4">$<span id="discord-standard-price">10</span></p>
+                                <div class="mb-6">
+                                    <label for="fast-delivery-discord-standard" class="flex items-center cursor-pointer">
+                                        <input type="checkbox" id="fast-delivery-discord-standard" onchange="toggleFastDelivery('discord-standard', this)" class="form-checkbox h-5 w-5 text-indigo-500 rounded">
+                                        <span class="ml-3 text-white">Fast Delivery (1 day) <span class="text-green-400 font-bold">+ $5</span></span>
+                                    </label>
+                                </div>
+                                <p class="text-gray-200 mb-4 font-semibold"><i class="fas fa-star text-yellow-400 mr-2"></i>Everything from Basic</p>
+                                <ul class="space-y-4 text-gray-300 mb-8 flex-grow">
+                                    <li class="flex items-start"><i class="fas fa-star text-yellow-400 mr-3 mt-1"></i><span><span id="discord-standard-delivery">2-day delivery</span></span></li>
+                                    <li class="flex items-start"><i class="fas fa-star text-yellow-400 mr-3 mt-1"></i><span>Epic Server Design with Emojis</span></li>
+                                    <li class="flex items-start"><i class="fas fa-star text-yellow-400 mr-3 mt-1"></i><span>Verification System</span></li>
+                                    <li class="flex items-start"><i class="fas fa-star text-yellow-400 mr-3 mt-1"></i><span>Embedded Rules with Banner</span></li>
+                                    <li class="flex items-start"><i class="fas fa-star text-yellow-400 mr-3 mt-1"></i><span>Level System & Invite Tracking</span></li>
+                                    <li class="flex items-start"><i class="fas fa-star text-yellow-400 mr-3 mt-1"></i><span>Self Roles & Server Logs</span></li>
+                                    <li class="flex items-start"><i class="fas fa-star text-yellow-400 mr-3 mt-1"></i><span>Static & Animated Emojis</span></li>
+                                </ul>
+                                <button id="discord-standard-button" onclick="showPaymentModal('Discord Standard', 10, 'https://skrill.me/rq/Nisar%20Ud/10/USD?key=E7gI_4kzRNlQc3RiNrHeXBnj-bh')" class="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/50 mt-auto">Choose Plan</button>
+                            </div>
+                            <!-- Premium -->
+                            <div id="discord-premium-card" class="glass-card p-8 flex flex-col animate-on-scroll" style="transition-delay: 300ms;">
+                                <h3 class="text-xl font-bold text-indigo-400 mb-2">Premium</h3>
+                                <p class="text-4xl font-extrabold text-white mb-4">$<span id="discord-premium-price">20</span></p>
+                                <div class="mb-6">
+                                    <label for="fast-delivery-discord-premium" class="flex items-center cursor-pointer">
+                                        <input type="checkbox" id="fast-delivery-discord-premium" onchange="toggleFastDelivery('discord-premium', this)" class="form-checkbox h-5 w-5 text-indigo-500 rounded">
+                                        <span class="ml-3 text-white">Fast Delivery (2 days) <span class="text-green-400 font-bold">+ $5</span></span>
+                                    </label>
+                                </div>
+                                <p class="text-gray-200 mb-4 font-semibold"><i class="fas fa-crown text-amber-400 mr-2"></i>Everything from Standard</p>
+                                <ul class="space-y-4 text-gray-300 mb-8 flex-grow">
+                                    <li class="flex items-start"><i class="fas fa-crown text-amber-400 mr-3 mt-1"></i><span><span id="discord-premium-delivery">3-day</span> delivery</span></li>
+                                    <li class="flex items-start"><i class="fas fa-crown text-amber-400 mr-3 mt-1"></i><span>Support System (Tickets)</span></li>
+                                    <li class="flex items-start"><i class="fas fa-crown text-amber-400 mr-3 mt-1"></i><span>Anti-Raid & Spam Protection</span></li>
+                                    <li class="flex items-start"><i class="fas fa-crown text-amber-400 mr-3 mt-1"></i><span>Game Patch Updates</span></li>
+                                    <li class="flex items-start"><i class="fas fa-crown text-amber-400 mr-3 mt-1"></i><span>Color Self Roles</span></li>
+                                    <li class="flex items-start"><i class="fas fa-crown text-amber-400 mr-3 mt-1"></i><span>AI Bot Setup</span></li>
+                                    <li class="flex items-start"><i class="fas fa-crown text-amber-400 mr-3 mt-1"></i><span>Temporary Voice/Text Channels</span></li>
+                                    <li class="flex items-start"><i class="fas fa-crown text-amber-400 mr-3 mt-1"></i><span>Fun Bots (Aki, Counter, Pokémon)</span></li>
+                                    <li class="flex items-start"><i class="fas fa-crown text-amber-400 mr-3 mt-1"></i><span>After Delivery Technical Support</span></li>
+                                    <li class="flex items-start"><i class="fas fa-crown text-amber-400 mr-3 mt-1"></i><span>Server Backup System</span></li>
+                                </ul>
+                                <button id="discord-premium-button" onclick="showPaymentModal('Discord Premium', 20, 'https://skrill.me/rq/Nisar%20Ud/20/USD?key=FoyeSmlaMukYaiOc3v-jzEE6-Bs')" class="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/50 mt-auto">Go Pro</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Reviews Section -->
+            <section id="reviews" class="py-20 bg-black bg-opacity-20">
+                <div class="container mx-auto px-6">
+                    <h2 class="section-title animate-on-scroll">What Our Clients Say</h2>
+                    <p class="section-subtitle animate-on-scroll" style="transition-delay: 150ms;">We pride ourselves on delivering exceptional results. Here's what our clients have to say about their experience.</p>
+                    
+                    <!-- Add Review Form -->
+                    <div class="glass-card p-8 max-w-2xl mx-auto mb-12 mt-8 animate-on-scroll">
+                        <h3 class="text-2xl font-bold text-center text-white mb-6">Leave a Review</h3>
+                        <form id="review-form">
+                            <div class="mb-4">
+                                <label for="review-name" class="block text-gray-300 mb-2">Your Name</label>
+                                <input type="text" id="review-name" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-300 mb-2">Your Rating</label>
+                                <div id="review-stars" class="star-rating flex items-center text-3xl">
+                                    <i class="far fa-star" data-value="1"></i>
+                                    <i class="far fa-star" data-value="2"></i>
+                                    <i class="far fa-star" data-value="3"></i>
+                                    <i class="far fa-star" data-value="4"></i>
+                                    <i class="far fa-star" data-value="5"></i>
+                                </div>
+                            </div>
+                            <div class="mb-6">
+                                <label for="review-feedback" class="block text-gray-300 mb-2">Feedback</label>
+                                <textarea id="review-feedback" rows="4" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required></textarea>
+                            </div>
+                            <button type="submit" class="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/50 w-full">Submit Review</button>
+                        </form>
+                    </div>
+
+                    <!-- Display Reviews -->
+                    <div id="reviews-container" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- Reviews will be dynamically inserted here -->
+                        <p id="no-reviews-message" class="text-gray-400 text-center col-span-full">Be the first to leave a review!</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer id="contact" class="bg-gray-900 bg-opacity-50 pt-16 pb-8">
+            <div class="container mx-auto px-6">
+                <div class="grid md:grid-cols-3 gap-8 mb-8">
+                    <!-- About -->
+                    <div class="animate-on-scroll">
+                        <h4 class="text-xl font-bold text-white mb-4">Rare Service</h4>
+                        <p class="text-gray-400">Your dedicated partner for digital growth. We deliver rare quality and exceptional results.</p>
+                    </div>
+                    <!-- Contact Info -->
+                    <div class="animate-on-scroll" style="transition-delay: 150ms;">
+                        <h4 class="text-xl font-bold text-white mb-4">Contact Us</h4>
+                        <ul class="space-y-3 text-gray-400">
+                            <li><i class="fas fa-envelope mr-3 text-blue-400"></i> <a href="mailto:rareyt911@gmail.com" class="hover:text-white">rareyt911@gmail.com</a></li>
+                            <li><i class="fab fa-whatsapp mr-3 text-green-400"></i> <a href="https://wa.me/923409796147" target="_blank" class="hover:text-white">+92 340 9796147</a></li>
+                        </ul>
+                    </div>
+                    <!-- Social Links -->
+                    <div class="animate-on-scroll" style="transition-delay: 300ms;">
+                        <h4 class="text-xl font-bold text-white mb-4">Follow Us</h4>
+                        <div class="flex space-x-4">
+                            <a href="https://www.facebook.com/profile.php?id=61578205858515" target="_blank" class="text-gray-400 hover:text-blue-500 text-2xl transition"><i class="fab fa-facebook"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="border-t border-gray-800 pt-8 text-center text-gray-500">
+                    <p>&copy; 2024 Rare Service. All Rights Reserved.</p>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="payment-modal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 hidden">
+        <div class="glass-card p-8 rounded-lg max-w-md w-full text-center relative">
+            <button onclick="closePaymentModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
+            <h2 class="text-2xl font-bold text-white mb-2">Complete Your Order</h2>
+            <p class="text-gray-300 mb-6">You've selected: <strong id="modal-service-name" class="text-blue-400"></strong></p>
+            
+            <div id="payment-form">
+                <div class="mb-4">
+                    <label for="buyer-email" class="block text-gray-300 mb-2 text-left">Enter your email to proceed:</label>
+                    <input type="email" id="buyer-email" placeholder="you@example.com" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+                
+                <p class="text-lg font-bold text-white mb-4">Total: $<span id="modal-price"></span> USD</p>
+
+                <div class="space-y-4">
+                    <button id="skrill-button" class="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/50 w-full">Pay with Skrill</button>
+                    <button id="nayapay-button" class="btn-secondary w-full">Pay with NayaPay (Pakistan)</button>
+                    <button id="litecoin-button" class="bg-gray-800 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg w-full hidden">Pay with Litecoin (LTC)</button>
+                </div>
+            </div>
+
+            <div id="nayapay-instructions" class="hidden mt-6 p-4 bg-gray-800 rounded-lg border border-yellow-500 text-left">
+                <h4 class="font-bold text-yellow-400 mb-2">NayaPay Instructions</h4>
+                <p class="text-sm text-gray-300">
+                    1. Send payment to NayaPay number: <strong class="text-white">03409796147</strong>
+                    <br>
+                    2. Take a screenshot of your payment confirmation.
+                    <br>
+                    3. Send the screenshot to us on WhatsApp: <a href="https://wa.me/923409796147" target="_blank" class="text-blue-400 hover:underline font-bold">+923409796147</a>
+                </p>
+            </div>
+            <div id="litecoin-instructions" class="hidden mt-6 p-4 bg-gray-800 rounded-lg border border-blue-500 text-left">
+                <h4 class="font-bold text-blue-400 mb-2">Litecoin (LTC) Instructions</h4>
+                <p class="text-sm text-gray-300 break-words">
+                    1. Send payment to address: <strong class="text-white">ltc1qqg7ver40na2xmkwnhvu55mxhfn9c7fhst5vyhr</strong>
+                    <br>
+                    2. Take a screenshot of your payment confirmation.
+                    <br>
+                    3. Send the screenshot to us on WhatsApp: <a href="https://wa.me/923409796147" target="_blank" class="text-blue-400 hover:underline font-bold">+923409796147</a>
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Notification Modal -->
+    <div id="notification-modal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-[110] hidden">
+        <div class="glass-card p-8 rounded-lg max-w-sm w-full text-center relative">
+            <h2 id="notification-title" class="text-xl font-bold text-yellow-400 mb-4"></h2>
+            <p id="notification-message" class="text-gray-300 mb-6"></p>
+            <button onclick="closeNotificationModal()" class="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/50">OK</button>
+        </div>
+    </div>
+
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, serverTimestamp, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+        // Firebase configuration provided by user
+        const firebaseConfig = {
+            apiKey: "AIzaSyAfrgJa42DC2OeB4oHnY_1x9kYK4VvaQW4",
+            authDomain: "rare-web-ece2a.firebaseapp.com",
+            projectId: "rare-web-ece2a",
+            storageBucket: "rare-web-ece2a.appspot.com",
+            messagingSenderId: "556680350724",
+            appId: "1:556680350724:web:e474966c2f53502a3f3951",
+            measurementId: "G-Z5SKE6ER22"
+        };
+
+        // Initialize Firebase
+        let app, db, auth, userId;
+        
+        try {
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+            
+            signInAnonymously(auth)
+                .then((userCredential) => {
+                    userId = userCredential.user.uid;
+                    console.log("Anonymous User ID:", userId);
+                    loadReviews();
+                })
+                .catch((error) => {
+                    console.error("Anonymous sign-in failed:", error);
+                });
+
+        } catch (e) {
+            console.error("Firebase initialization failed:", e);
+            showNotification("Initialization Error", "The website could not connect to its services. Please verify the Firebase configuration.");
+        }
+
+
+        // --- Page Navigation ---
+        const pages = document.querySelectorAll('.page');
+        window.showPage = function(pageId) {
+            const currentPage = Array.from(pages).find(p => !p.classList.contains('hidden'));
+            const newPage = document.getElementById(`${pageId}-page`);
+
+            if (currentPage && currentPage !== newPage) {
+                currentPage.classList.add('fade-out');
+                setTimeout(() => {
+                    currentPage.classList.add('hidden');
+                    currentPage.classList.remove('fade-out');
+                    
+                    newPage.classList.remove('hidden');
+                    void newPage.offsetWidth; 
+                    setupScrollAnimations(newPage);
+                    window.scrollTo(0, 0);
+                }, 400); 
+            } else if (!currentPage) {
+                newPage.classList.remove('hidden');
+                setupScrollAnimations(newPage);
+            }
+        }
+
+        // --- Mobile Menu ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        window.toggleMobileMenu = function() {
+            mobileMenu.classList.toggle('hidden');
+        }
+        mobileMenuButton.addEventListener('click', toggleMobileMenu);
+
+        // --- Review System ---
+        const reviewForm = document.getElementById('review-form');
+        const reviewStars = document.getElementById('review-stars').querySelectorAll('.fa-star');
+        const reviewsContainer = document.getElementById('reviews-container');
+        const noReviewsMessage = document.getElementById('no-reviews-message');
+        let currentRating = 0;
+
+        reviewStars.forEach(star => {
+            star.addEventListener('click', () => {
+                currentRating = star.dataset.value;
+                reviewStars.forEach(s => {
+                    s.classList.toggle('fas', s.dataset.value <= currentRating);
+                    s.classList.toggle('far', s.dataset.value > currentRating);
+                    s.classList.toggle('selected', s.dataset.value <= currentRating);
+                });
+            });
+        });
+
+        reviewForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!db) { showNotification("Error", "Database not connected."); return; }
+            if (currentRating === 0) {
+                showNotification("Incomplete", "Please select a star rating before submitting.");
+                return;
+            }
+            const reviewData = {
+                name: document.getElementById('review-name').value,
+                rating: parseInt(currentRating),
+                feedback: document.getElementById('review-feedback').value,
+                createdAt: serverTimestamp()
+            };
+            try {
+                // Public data path
+                await addDoc(collection(db, "reviews"), reviewData);
+                reviewForm.reset();
+                currentRating = 0;
+                reviewStars.forEach(s => { s.classList.remove('fas', 'selected'); s.classList.add('far'); });
+                showNotification("Success", "Thank you for your review!");
+            } catch (error) {
+                console.error("Error adding review: ", error);
+                showNotification("Error", "Sorry, there was an error submitting your review.");
+            }
+        });
+
+        function loadReviews() {
+            if (!db) return;
+            const q = query(collection(db, "reviews"), orderBy("createdAt", "desc"));
+            onSnapshot(q, (snapshot) => {
+                if (snapshot.empty) {
+                    noReviewsMessage.classList.remove('hidden');
+                    reviewsContainer.innerHTML = '';
+                    return;
+                }
+                noReviewsMessage.classList.add('hidden');
+                reviewsContainer.innerHTML = '';
+                snapshot.forEach(doc => {
+                    const review = doc.data();
+                    const reviewEl = document.createElement('div');
+                    reviewEl.className = 'glass-card p-6 animate-on-scroll';
+                    
+                    let starsHTML = '';
+                    for (let i = 1; i <= 5; i++) {
+                        starsHTML += `<i class="fas fa-star ${i <= review.rating ? 'text-amber-400' : 'text-gray-600'}"></i>`;
+                    }
+                    reviewEl.innerHTML = `<div class="flex items-center mb-4"><div class="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-xl mr-4">${review.name.charAt(0).toUpperCase()}</div><div><h4 class="font-bold text-white">${review.name}</h4><div class="text-lg">${starsHTML}</div></div></div><p class="text-gray-300">"${review.feedback}"</p>`;
+                    reviewsContainer.appendChild(reviewEl);
+                });
+                setupScrollAnimations(document.getElementById('reviews'));
+            });
+        }
+        
+        // --- Payment Modal & Notification Modal Logic ---
+        const paymentModal = document.getElementById('payment-modal');
+        const skrillButton = document.getElementById('skrill-button');
+        const nayapayButton = document.getElementById('nayapay-button');
+        const litecoinButton = document.getElementById('litecoin-button');
+        const nayapayInstructions = document.getElementById('nayapay-instructions');
+        const litecoinInstructions = document.getElementById('litecoin-instructions');
+        const notificationModal = document.getElementById('notification-modal');
+        let currentService = {};
+
+        window.showPaymentModal = (serviceName, price, skrillLink) => {
+            currentService = { serviceName, price, skrillLink };
+            document.getElementById('modal-service-name').textContent = serviceName;
+            document.getElementById('modal-price').textContent = price;
+            
+            // Show/hide Litecoin button based on service
+            if(serviceName.toLowerCase().includes('discord')) {
+                litecoinButton.classList.remove('hidden');
+            } else {
+                litecoinButton.classList.add('hidden');
+            }
+
+            paymentModal.classList.remove('hidden');
+            nayapayInstructions.classList.add('hidden'); // Reset instructions
+            litecoinInstructions.classList.add('hidden'); // Reset instructions
+        }
+
+        window.closePaymentModal = () => {
+            paymentModal.classList.add('hidden');
+        }
+
+        window.showNotification = (title, message) => {
+            document.getElementById('notification-title').textContent = title;
+            document.getElementById('notification-message').textContent = message;
+            notificationModal.classList.remove('hidden');
+        }
+        
+        window.closeNotificationModal = () => {
+            notificationModal.classList.add('hidden');
+        }
+
+        async function processOrder(paymentMethod) {
+            if (!db) { showNotification("Error", "Database not connected."); return; }
+
+            const buyerEmailInput = document.getElementById('buyer-email');
+            if (!buyerEmailInput.value || !buyerEmailInput.checkValidity()) {
+                showNotification("Input Required", "Please enter a valid email address.");
+                buyerEmailInput.focus();
+                return;
+            }
+
+            const orderData = {
+                buyerEmail: buyerEmailInput.value,
+                serviceName: currentService.serviceName,
+                price: currentService.price,
+                paymentMethod: paymentMethod,
+                createdAt: serverTimestamp()
+            };
+
+            try {
+                await addDoc(collection(db, "orders"), orderData);
+                
+                if (paymentMethod === 'Skrill') {
+                    closePaymentModal();
+                    const skrillWindow = window.open(currentService.skrillLink, '_blank');
+                    if (!skrillWindow || skrillWindow.closed || typeof skrillWindow.closed == 'undefined') {
+                        showNotification('Pop-up Blocked', 'Your browser may have blocked the payment window. Please allow pop-ups for this site to complete the payment.');
+                    } else {
+                        showNotification('Order Placed!', `Thank you for your order. You are being redirected to Skrill.`);
+                    }
+                } else {
+                    showNotification('Order Logged', 'Your order has been recorded. Please follow the payment instructions.');
+                }
+            } catch (error) {
+                console.error("Error creating order: ", error);
+                showNotification("Error", "There was an error processing your order. Please try again.");
+            }
+        }
+
+        skrillButton.addEventListener('click', () => processOrder('Skrill'));
+        
+        nayapayButton.addEventListener('click', () => {
+            nayapayInstructions.classList.remove('hidden');
+            litecoinInstructions.classList.add('hidden');
+            processOrder('NayaPay');
+        });
+
+        litecoinButton.addEventListener('click', () => {
+            litecoinInstructions.classList.remove('hidden');
+            nayapayInstructions.classList.add('hidden');
+            processOrder('Litecoin');
+        });
+
+
+        // --- Animation Logic ---
+        const scrollObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        function setupScrollAnimations(container) {
+            const elementsToAnimate = container.querySelectorAll('.animate-on-scroll');
+            elementsToAnimate.forEach(el => {
+                el.classList.remove('is-visible');
+                scrollObserver.observe(el);
+            });
+        }
+        
+        window.addEventListener('scroll', () => {
+            document.querySelector('header').classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // --- Initial Load & Loader Logic ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const loader = document.getElementById('loader');
+            const app = document.getElementById('app');
+
+            setTimeout(() => {
+                loader.classList.add('hidden');
+                app.classList.add('loaded');
+                
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                    setupScrollAnimations(document.body);
+                }, 500); // Match CSS transition duration
+
+            }, 3500); // 3.5 second delay
+        });
+        
+        // --- Fast Delivery Logic ---
+        window.toggleFastDelivery = (tier, checkbox) => {
+            const deliveryOptions = {
+                'starter': { basePrice: 60, fastPrice: 75, baseDelivery: '4-day delivery', fastDelivery: '3-day delivery', baseLink: 'https://skrill.me/rq/Nisar%20Ud/60/USD?key=1VDpundqNXS3XPYlg8hxEAGo7zC', fastLink: 'https://skrill.me/rq/Nisar%20Ud/75/USD?key=GXCjx9DawBnwkaANfaM1CXXTGzw', serviceName: 'Starter Ads Setup' },
+                'growth': { basePrice: 170, fastPrice: 185, baseDelivery: '4‑day management', fastDelivery: '3-day management', baseLink: 'https://skrill.me/rq/Nisar%20Ud/170/USD?key=_DFkSpAHspH9D4X_se04ufxp7HS', fastLink: 'https://skrill.me/rq/Nisar%20Ud/185/USD?key=5FBORg69D7D9Cx_P3CYuymbLHwM', serviceName: 'Growth Accelerator' },
+                'pro': { basePrice: 325, fastPrice: 340, baseDelivery: '4-day delivery', fastDelivery: '3-day delivery', baseLink: 'https://skrill.me/rq/Nisar%20Ud/325/USD?key=wDg-m8alxlsEFlAvAciKXcLoaA0', fastLink: 'https://skrill.me/rq/Nisar%20Ud/340/USD?key=4coYGuDF2D8H9bCXcB-x_R0fb1h', serviceName: 'Brand Reach Pro' },
+                'product-standard': { basePrice: 20, fastPrice: 30, baseDelivery: '2-day delivery', fastDelivery: '1-day delivery', baseLink: 'https://skrill.me/rq/Nisar%20Ud/20/USD?key=tkKjTlqtP8fMhiH8Fx4MIdZ0_Ln', fastLink: 'https://skrill.me/rq/Nisar%20Ud/30/USD?key=PqziVlJJZKcuPWOlr0g97LmkWdT', serviceName: 'Product Listing & Improvement' },
+                'product-premium': { basePrice: 25, fastPrice: 35, baseDelivery: '3-day delivery', fastDelivery: '2-day delivery', baseLink: 'https://skrill.me/rq/Nisar%20Ud/25/USD?key=KNminP-egUoMX_2Cxw4OPH4UNDH', fastLink: 'https://skrill.me/rq/Nisar%20Ud/35/USD?key=j8l0gdst9xBi6XH9uzLNTnM6pCh', serviceName: 'Listing Boost + Extra Perks' },
+                'discord-standard': { basePrice: 10, fastPrice: 15, baseDelivery: '2-day delivery', fastDelivery: '1-day delivery', baseLink: 'https://skrill.me/rq/Nisar%20Ud/10/USD?key=E7gI_4kzRNlQc3RiNrHeXBnj-bh', fastLink: 'https://skrill.me/rq/Nisar%20Ud/15/USD?key=RxmENPW3ge6q8Tj5fRZ97JwtFsy', serviceName: 'Discord Standard' },
+                'discord-premium': { basePrice: 20, fastPrice: 25, baseDelivery: '3-day delivery', fastDelivery: '2-day delivery', baseLink: 'https://skrill.me/rq/Nisar%20Ud/20/USD?key=FoyeSmlaMukYaiOc3v-jzEE6-Bs', fastLink: 'https://skrill.me/rq/Nisar%20Ud/25/USD?key=F603vu2YGGKpU0720rGD45UHCHB', serviceName: 'Discord Premium' }
+            };
+
+            const options = deliveryOptions[tier];
+            if (!options) return;
+
+            const priceEl = document.getElementById(`${tier}-price`);
+            const deliveryEl = document.getElementById(`${tier}-delivery`);
+            const buttonEl = document.getElementById(`${tier}-button`);
+
+            const isFast = checkbox.checked;
+            const price = isFast ? options.fastPrice : options.basePrice;
+            const delivery = isFast ? options.fastDelivery : options.baseDelivery;
+            const link = isFast ? options.fastLink : options.baseLink;
+            const serviceName = isFast ? `${options.serviceName} (Fast Delivery)` : options.serviceName;
+
+            priceEl.textContent = price;
+            if (deliveryEl) deliveryEl.textContent = delivery;
+            
+            // Update the onclick attribute of the button
+            buttonEl.setAttribute('onclick', `showPaymentModal('${serviceName}', ${price}, '${link}')`);
+        };
+
+    </script>
+    
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/6873fa4c359126190c0bf405/1j02gjf9k';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
+    <!--End of Tawk.to Script-->
+
+</body>
+</html>
