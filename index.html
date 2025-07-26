@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rare Service - Your Digital Growth Partner</title>
+    <title>Rare Insights - Your Digital Growth Partner</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Expert guides on social media advertising, web design, AI agents, Discord management, and product description writing.">
+    <meta name="keywords" content="social media marketing, web design, AI agents, discord server, product descriptions, digital growth">
     
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9629708945764067"
@@ -20,963 +24,787 @@
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
-    <!-- Three.js for 3D animation -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
     <style>
-        /* Custom styles for a polished look */
+        /* Base styles for the body */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #000000;
-            background-image: radial-gradient(circle at top, rgba(160, 32, 240, 0.15), transparent 50%);
-            color: #e5e7eb;
+            background-color: #ffffff; 
+            color: #1f2937; /* Dark gray text */
         }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 1rem;
-            transition: all 0.3s ease;
+        /* Style for navigation links */
+        .nav-link {
+            @apply text-gray-600 hover:text-blue-600 font-semibold transition duration-300 ease-in-out;
         }
-        .btn-secondary {
-             @apply bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-gray-500/50;
+        /* Styles for blog post content using Tailwind's typography plugin */
+        .prose {
+            @apply max-w-none;
         }
-        .section-title {
-            @apply text-4xl md:text-5xl font-extrabold text-center mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500;
+        .prose h1, .prose h2, .prose h3, .prose h4 {
+            @apply text-gray-800 font-bold;
         }
-        .section-subtitle {
-            @apply text-center text-gray-400 mb-12 max-w-2xl mx-auto;
+        .prose a {
+            @apply text-blue-600 hover:underline;
         }
-        /* Star rating styles */
-        .star-rating .fa-star {
-            color: #4b5563; /* gray-600 */
-            cursor: pointer;
-            transition: color 0.2s;
+        .prose blockquote {
+            @apply border-l-4 border-blue-500 pl-4 italic text-gray-600;
         }
-        .star-rating .fa-star:hover,
-        .star-rating .fa-star:hover ~ .fa-star {
-            color: #f59e0b; /* amber-500 */
+        .prose ul {
+            @apply list-disc list-inside;
         }
-        .star-rating:hover .fa-star {
-            color: #f59e0b;
+        .prose li {
+            @apply mb-2;
         }
-        .star-rating .fa-star.selected {
-            color: #f59e0b;
+        .prose table { @apply w-full my-4; }
+        .prose th { @apply bg-gray-100 p-2 border; }
+        .prose td { @apply p-2 border; }
+
+        /* Initially hide all pages */
+        .page {
+            display: none;
+        }
+        /* Show the active page */
+        .page.active {
+            display: block;
         }
 
-        /* Animation Styles */
-        .animate-on-scroll {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-        .animate-on-scroll.is-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .page {
-            transition: opacity 0.4s ease-in-out;
-        }
-        .page.fade-out {
-            opacity: 0;
-        }
-        header {
-            transition: background-color 0.3s ease-in-out;
-        }
-        header.scrolled {
-            background: rgba(10, 10, 10, 0.8);
-        }
-        
-        /* Loader Styles */
-        #loader {
+        /* Cookie Banner Styles */
+        #cookie-banner {
             transition: opacity 0.5s ease-in-out;
-        }
-        #loader.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-        .loader-spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid rgba(255, 255, 255, 0.2);
-            border-top-color: #3b82f6; /* blue-500 */
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        /* Initially hide main app content */
-        #app {
-            visibility: hidden;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
-        }
-        #app.loaded {
-            visibility: visible;
-            opacity: 1;
-        }
-        
-        /* 3D Canvas style */
-        #bg-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-        .hero-section {
-            position: relative;
-            overflow: hidden;
         }
     </style>
 </head>
 <body class="antialiased">
 
-    <!-- Loader -->
-    <div id="loader" class="fixed inset-0 bg-black z-[100] flex flex-col items-center justify-center">
-        <div class="text-center">
-             <img src="https://res.cloudinary.com/deoge9dph/image/upload/v1752509474/khane_w6blfh.png" alt="Rare Service Logo" class="h-24 w-24 mx-auto mb-6 rounded-2xl animate-pulse object-cover">
-            <h1 class="text-4xl md:text-5xl font-extrabold text-white tracking-wider mb-8">
-                Rare Service
-            </h1>
-            <div class="loader-spinner"></div>
-        </div>
-    </div>
+    <!-- App Container: Wraps the entire application -->
+    <div id="app" class="min-h-screen flex flex-col">
 
-
-    <!-- App Container -->
-    <div id="app" class="min-h-screen">
-
-        <!-- Header -->
-        <header class="sticky top-0 z-50 glass-card shadow-lg">
+        <!-- Header: Consistent across all pages -->
+        <header class="bg-white shadow-sm sticky top-0 z-50">
             <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-                <a href="#" onclick="showPage('home')" class="text-2xl font-bold text-white tracking-wider flex items-center">
-                    <img src="https://res.cloudinary.com/deoge9dph/image/upload/v1752509474/khane_w6blfh.png" alt="Rare Service Logo" class="h-9 w-9 mr-3 rounded-lg object-cover">
-                    <span>Rare Service</span>
+                <a href="#home" class="text-2xl font-bold text-gray-800 tracking-wider flex items-center">
+                    <img src="https://res.cloudinary.com/deoge9dph/image/upload/v1752509474/khane_w6blfh.png" alt="Rare Insights Logo" class="h-9 w-9 mr-3 rounded-lg object-cover">
+                    <span>Rare Insights</span>
                 </a>
                 <nav class="hidden md:flex items-center space-x-8">
-                    <a href="#" onclick="showPage('home')" class="text-gray-300 hover:text-white transition">Home</a>
-                    <a href="https://rare1848.github.io/rareinfo/" target="_blank" class="text-gray-300 hover:text-white transition">About Us</a>
-                    <div class="relative group">
-                        <button class="text-gray-300 hover:text-white transition flex items-center">
-                            Services <i class="fas fa-chevron-down ml-2 text-xs"></i>
-                        </button>
-                        <div class="absolute hidden group-hover:block bg-gray-800 rounded-lg shadow-lg py-2 w-56 mt-2">
-                            <a href="#" onclick="showPage('social-media')" class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white">Social Media Ads</a>
-                            <a href="#" onclick="showPage('product-desc')" class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white">Product Descriptions</a>
-                            <a href="#" onclick="showPage('website-creation')" class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white">Website Creation</a>
-                            <a href="#" onclick="showPage('discord')" class="block px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white">Discord Management</a>
-                        </div>
-                    </div>
-                    <a href="#reviews" class="text-gray-300 hover:text-white transition">Reviews</a>
-                    <a href="#contact" class="text-gray-300 hover:text-white transition">Contact</a>
+                    <a href="#home" class="nav-link">Blog</a>
+                    <a href="#about" class="nav-link">About Us</a>
+                    <a href="#contact" class="nav-link">Contact</a>
                 </nav>
-                <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none ml-4">
+                <button id="mobile-menu-button" class="md:hidden text-gray-800 focus:outline-none ml-4">
                     <i class="fas fa-bars text-2xl"></i>
                 </button>
             </div>
             <!-- Mobile Menu -->
-            <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
-                <a href="#" onclick="showPage('home'); toggleMobileMenu();" class="block py-2 text-gray-300 hover:text-white">Home</a>
-                <a href="https://rare1848.github.io/rareinfo/" target="_blank" onclick="toggleMobileMenu()" class="block py-2 text-gray-300 hover:text-white">About Us</a>
-                <h4 class="text-gray-500 font-bold mt-2">Services</h4>
-                <a href="#" onclick="showPage('social-media'); toggleMobileMenu();" class="block py-2 pl-4 text-gray-300 hover:text-white">Social Media Ads</a>
-                <a href="#" onclick="showPage('product-desc'); toggleMobileMenu();" class="block py-2 pl-4 text-gray-300 hover:text-white">Product Descriptions</a>
-                <a href="#" onclick="showPage('website-creation'); toggleMobileMenu();" class="block py-2 pl-4 text-gray-300 hover:text-white">Website Creation</a>
-                <a href="#" onclick="showPage('discord'); toggleMobileMenu();" class="block py-2 pl-4 text-gray-300 hover:text-white">Discord Management</a>
-                <a href="#reviews" onclick="toggleMobileMenu()" class="block py-2 text-gray-300 hover:text-white">Reviews</a>
-                <a href="#contact" onclick="toggleMobileMenu()" class="block py-2 text-gray-300 hover:text-white">Contact</a>
+            <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg absolute top-full left-0 w-full">
+                <a href="#home" class="block py-2 px-6 nav-link">Blog</a>
+                <a href="#about" class="block py-2 px-6 nav-link">About Us</a>
+                <a href="#contact" class="block py-2 px-6 nav-link">Contact</a>
             </div>
         </header>
 
-        <main>
-            <!-- Home Page Section -->
-            <div id="home-page" class="page">
-                <section class="hero-section pt-20 md:pt-32 pb-8">
-                    <div class="container mx-auto px-6 text-center relative z-10">
-                        <h1 class="text-5xl md:text-7xl font-extrabold text-white leading-tight mb-6 animate-on-scroll">
-                            Elevate Your Brand with <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">Rare Services</span>
-                        </h1>
-                        <p class="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-10 animate-on-scroll" style="transition-delay: 150ms;">
-                            We provide elite social media advertising and compelling product descriptions to make your brand shine. Discover the difference expertise makes.
-                        </p>
-                        <div class="flex justify-center items-center space-x-4 animate-on-scroll" style="transition-delay: 300ms;">
-                           <button onclick="showPage('social-media')" class="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/50">Explore Ad Services</button>
-                           <button onclick="showPage('product-desc')" class="btn-secondary">View Writing Services</button>
-                        </div>
-                    </div>
-                </section>
-
-                <section class="pb-20">
+        <!-- Main Content: Page content will be swapped here -->
+        <main class="flex-grow bg-gray-50">
+            
+            <!-- Home Page Content (Blog Feed) -->
+            <div id="page-home" class="page">
+                <section class="py-12">
                     <div class="container mx-auto px-6">
-                        <h2 class="section-title animate-on-scroll">Our Core Services</h2>
-                        <p class="section-subtitle animate-on-scroll" style="transition-delay: 150ms;">Choose a service to see our tailored packages and find the perfect fit for your business goals.</p>
-                        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto mt-8">
-                            <!-- Social Media Card -->
-                            <div class="glass-card p-8 text-center hover:border-blue-400 transition-all duration-300 transform hover:-translate-y-2 animate-on-scroll">
-                                <i class="fas fa-bullhorn text-5xl text-blue-400 mb-4"></i>
-                                <h3 class="text-2xl font-bold text-white mb-3">Social Media Advertising</h3>
-                                <p class="text-gray-400 mb-6">Targeted campaigns across major platforms to boost your reach, engagement, and conversions.</p>
-                                <button onclick="showPage('social-media')" class="font-semibold text-blue-400 hover:text-blue-300 transition">Learn More <i class="fas fa-arrow-right ml-2"></i></button>
+                        <div class="lg:flex lg:space-x-8">
+                            <!-- Main Content Area -->
+                            <div class="lg:w-2/3">
+                                <div class="bg-white p-6 rounded-lg shadow-sm">
+                                    <h1 class="text-3xl md:text-4xl font-extrabold mb-4 text-gray-800">The Digital Growth Hub</h1>
+                                    <p class="text-gray-600 mb-8">
+                                        Welcome to Rare Insights, your ultimate resource for mastering the digital world. Explore our expert guides on social media, web design, AI, community management, and e-commerce to elevate your skills and grow your business.
+                                    </p>
+                                </div>
+
+                                <!-- About Us Section on Homepage -->
+                                <div class="bg-white p-6 rounded-lg shadow-sm mt-8 prose lg:prose-lg">
+                                    <h2 class="text-2xl font-bold mb-4 text-gray-800">Our Expertise: Your Digital Advantage</h2>
+                                    <p>
+                                        With over <strong>3+ years of dedicated, hands-on experience</strong>, the team at Rare Insights is a collective of seasoned professionals specializing in the pivotal domains of digital growth. We don't just write about these topics; we live and breathe them daily, bringing practical, battle-tested knowledge from the trenches of the digital landscape to every guide we create. Our commitment is to transform complex subjects into actionable strategies that you can implement for tangible results. We believe that true expertise is born from a relentless pursuit of knowledge combined with the wisdom gained from practical application. Our journey has been one of continuous learning, adapting to the ever-shifting algorithms, emerging technologies, and evolving consumer behaviors that define the digital age. This unique blend of theoretical depth and practical acumen allows us to offer insights that are not only accurate and up-to-date but also profoundly relevant to the real-world challenges faced by businesses and creators today. We are not just observers; we are active participants in the digital ecosystem, constantly testing, refining, and validating the strategies we teach. This commitment to active practice ensures that our content is never stale or purely academic. Instead, it is a living repository of what works right now, designed to give you a distinct competitive edge.
+                                    </p>
+                                    
+                                    <h3 class="font-semibold text-xl text-gray-700">Web Designer & Developer</h3>
+                                    <p>We are passionate architects of the digital experience. Our expertise covers the full spectrum of web design and development, from the initial spark of an idea to a fully functional, high-performance website. We begin with a deep dive into User Experience (UX) research, creating detailed user personas and information architecture that ensures every website we conceptualize is intuitive and user-centric. Our User Interface (UI) design process focuses on creating stunning, memorable visual interfaces that are not only beautiful but also accessible and consistent with your brand identity. On the development front, we are proficient in the latest frontend and backend technologies, building responsive, fast-loading websites that provide a seamless experience on any device. We believe a great website is the undisputed cornerstone of any successful digital presence, acting as your 24/7 salesperson and brand ambassador. Our development philosophy is rooted in clean, scalable code and a commitment to web standards, ensuring that the sites we build are not only visually impressive but also robust, secure, and maintainable for the long term.</p>
+                                    
+                                    <h3 class="font-semibold text-xl text-gray-700">Building Advanced AI Agents</h3>
+                                    <p>Standing at the forefront of the artificial intelligence revolution, we specialize in the complex and exciting field of designing and building advanced, autonomous AI agents. Our experience with cutting-edge frameworks like LangChain and LlamaIndex, coupled with our deep understanding of powerful Large Language Models (LLMs) like GPT-4 and Gemini, allows us to create intelligent systems that can automate complex tasks, streamline business processes, and unlock unprecedented levels of efficiency. We architect agents with robust capabilities for perception, planning, memory, and tool use, enabling them to interact with the digital world to perform research, manage communications, and execute multi-step workflows. We are not just theorists; we are builders, and we are passionate about making the power of autonomous AI accessible and practical for real-world applications. Our work in this area extends to the critical domains of prompt engineering, agent safety, and ethical AI, ensuring that the systems we conceptualize are not only powerful but also reliable and responsible.</p>
+                                    
+                                    <h3 class="font-semibold text-xl text-gray-700">Managing Discord Servers</h3>
+                                    <p>A thriving online community is one of the most powerful assets a brand or creator can have in the modern digital ecosystem. With years of experience in Discord server management, we know precisely what it takes to build a community from the ground up and nurture it into a vibrant, self-sustaining ecosystem. Our skills include strategic server setup with intricate role and permission structures, advanced bot automation for moderation and engagement, and the implementation of community-building strategies that foster a loyal, active, and positive member base. We understand the nuances of community culture, conflict resolution, and event management, ensuring your Discord server becomes a valuable hub for your audience, driving brand loyalty and user retention in a way that traditional marketing channels cannot. We have managed communities of all sizes, from small, niche groups to large-scale brand servers, giving us a broad perspective on what it takes to succeed.</p>
+                                    
+                                    <h3 class="font-semibold text-xl text-gray-700">Product Description Expert</h3>
+                                    <p>In the competitive landscape of e-commerce, words sell. We are expert copywriters with a proven track record of crafting persuasive, SEO-optimized product descriptions that drive conversions. Our approach is a meticulous blend of art and science. We dive deep into consumer psychology to understand what motivates a purchase, and we use the art of storytelling to create compelling narratives that resonate with the target audience on an emotional level. Simultaneously, we apply the science of SEO, conducting thorough keyword research and on-page optimization to ensure your products are discovered by search engines. The result is copy that not only ranks well but also turns passive browsers into loyal, paying customers. We understand how to structure copy for maximum readability, overcome customer objections before they arise, and write powerful calls-to-action that compel users to take the next step.</p>
+
+                                    <h2 class="text-2xl font-bold mt-8 mb-4 text-gray-800">Our Philosophy: Knowledge into Action</h2>
+                                    <p>At Rare Insights, we believe that knowledge is only powerful when it's put into action. That's why our content is meticulously structured to be as practical as possible. We break down complex topics into digestible chapters, provide step-by-step instructions, and use real-world examples and case studies to illustrate key concepts. We understand that the digital world is constantly evolving, which is why we are committed to continuous learning and updating our content to reflect the latest trends, technologies, and best practices. Our goal is to be more than just a blog; we aim to be your trusted partner in digital growth, providing you with the rare insights you need to succeed in an ever-changing landscape. Whether you're a solo entrepreneur, a small business owner, or part of a larger marketing team, our guides are designed to equip you with the skills and confidence to achieve your digital objectives. We are dedicated to the principle of "teaching you to fish," empowering you not just with answers, but with the frameworks and mental models to solve future challenges on your own. Your success is our success, and we are passionate about providing the resources to make that happen.</p>
+                                </div>
+
+                                <!-- Blog Post Listings -->
+                                <div class="mt-8" id="blog-post-listings">
+                                    <h2 class="text-2xl font-bold mb-4 text-gray-800 px-1">From Our Blog</h2>
+                                    <div class="blog-post-card" data-page-id="social-media">
+                                        <div class="bg-white rounded-lg shadow-sm overflow-hidden mb-8">
+                                            <div class="p-6">
+                                                <h3 class="text-2xl font-bold mb-2 text-blue-700 hover:text-blue-900"><a href="#social-media">The Definitive Guide to Social Media Advertising</a></h3>
+                                                <p class="text-sm text-gray-500 mb-4">by Rare Insights</p>
+                                                <p class="text-gray-600 mb-4">Unlock the power of paid social with our deep dive into platform strategies, ad creatives, targeting, and analytics for maximum ROI.</p>
+                                                <a href="#social-media" class="font-semibold text-blue-600 hover:text-blue-800 transition">Read More <i class="fas fa-arrow-right ml-2"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="blog-post-card" data-page-id="web-design">
+                                        <div class="bg-white rounded-lg shadow-sm overflow-hidden mb-8">
+                                            <div class="p-6">
+                                                <h3 class="text-2xl font-bold mb-2 text-blue-700 hover:text-blue-900"><a href="#web-design">Modern Web Design: Principles of UI/UX and Development</a></h3>
+                                                <p class="text-sm text-gray-500 mb-4">by Rare Insights</p>
+                                                <p class="text-gray-600 mb-4">Learn the core principles of creating beautiful, user-friendly, and high-performing websites from concept to launch.</p>
+                                                <a href="#web-design" class="font-semibold text-blue-600 hover:text-blue-800 transition">Read More <i class="fas fa-arrow-right ml-2"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="blog-post-card" data-page-id="ai-agents">
+                                        <div class="bg-white rounded-lg shadow-sm overflow-hidden mb-8">
+                                            <div class="p-6">
+                                                <h3 class="text-2xl font-bold mb-2 text-blue-700 hover:text-blue-900"><a href="#ai-agents">Building Advanced AI Agents: A Practical Guide</a></h3>
+                                                <p class="text-sm text-gray-500 mb-4">by Rare Insights</p>
+                                                <p class="text-gray-600 mb-4">Step into the future with our guide on designing, training, and deploying autonomous AI agents for business automation.</p>
+                                                <a href="#ai-agents" class="font-semibold text-blue-600 hover:text-blue-800 transition">Read More <i class="fas fa-arrow-right ml-2"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                     <div class="blog-post-card" data-page-id="discord-management">
+                                        <div class="bg-white rounded-lg shadow-sm overflow-hidden mb-8">
+                                            <div class="p-6">
+                                                <h3 class="text-2xl font-bold mb-2 text-blue-700 hover:text-blue-900"><a href="#discord-management">Mastering Discord: From Server Setup to Community Growth</a></h3>
+                                                <p class="text-sm text-gray-500 mb-4">by Rare Insights</p>
+                                                <p class="text-gray-600 mb-4">Build a thriving online community with our complete guide to Discord server management, moderation, and engagement.</p>
+                                                <a href="#discord-management" class="font-semibold text-blue-600 hover:text-blue-800 transition">Read More <i class="fas fa-arrow-right ml-2"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                     <div class="blog-post-card" data-page-id="product-description">
+                                        <div class="bg-white rounded-lg shadow-sm overflow-hidden mb-8">
+                                            <div class="p-6">
+                                                <h3 class="text-2xl font-bold mb-2 text-blue-700 hover:text-blue-900"><a href="#product-description">The Art of Persuasion: Writing Product Descriptions That Sell</a></h3>
+                                                <p class="text-sm text-gray-500 mb-4">by Rare Insights</p>
+                                                <p class="text-gray-600 mb-4">Turn browsers into buyers by mastering the psychology, SEO, and storytelling behind high-converting product copy.</p>
+                                                <a href="#product-description" class="font-semibold text-blue-600 hover:text-blue-800 transition">Read More <i class="fas fa-arrow-right ml-2"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="no-results-message" class="hidden bg-white p-6 rounded-lg shadow-sm text-center text-gray-600">
+                                        <p>No articles found matching your search.</p>
+                                    </div>
+                                </div>
                             </div>
-                            <!-- Product Description Card -->
-                            <div class="glass-card p-8 text-center hover:border-purple-400 transition-all duration-300 transform hover:-translate-y-2 animate-on-scroll" style="transition-delay: 150ms;">
-                                <i class="fas fa-pencil-alt text-5xl text-purple-400 mb-4"></i>
-                                <h3 class="text-2xl font-bold text-white mb-3">Product Descriptions</h3>
-                                <p class="text-gray-400 mb-6">SEO-optimized, persuasive copy that turns browsers into buyers and climbs search rankings.</p>
-                                <button onclick="showPage('product-desc')" class="font-semibold text-purple-400 hover:text-purple-300 transition">Learn More <i class="fas fa-arrow-right ml-2"></i></button>
-                            </div>
-                            <!-- Website Creation Card -->
-                            <div class="glass-card p-8 text-center hover:border-green-400 transition-all duration-300 transform hover:-translate-y-2 animate-on-scroll" style="transition-delay: 300ms;">
-                                <i class="fas fa-laptop-code text-5xl text-green-400 mb-4"></i>
-                                <h3 class="text-2xl font-bold text-white mb-3">Website Creation</h3>
-                                <p class="text-gray-400 mb-6">Responsive, mobile-friendly websites with admin panels and e-commerce solutions.</p>
-                                <button onclick="showPage('website-creation')" class="font-semibold text-green-400 hover:text-green-300 transition">Learn More <i class="fas fa-arrow-right ml-2"></i></button>
-                            </div>
-                             <!-- Discord Management Card -->
-                            <div class="glass-card p-8 text-center hover:border-indigo-400 transition-all duration-300 transform hover:-translate-y-2 animate-on-scroll" style="transition-delay: 450ms;">
-                                <i class="fab fa-discord text-5xl text-indigo-400 mb-4"></i>
-                                <h3 class="text-2xl font-bold text-white mb-3">Discord Management</h3>
-                                <p class="text-gray-400 mb-6">Professional server setup and management to build and grow your community.</p>
-                                <button onclick="showPage('discord')" class="font-semibold text-indigo-400 hover:text-indigo-300 transition">Learn More <i class="fas fa-arrow-right ml-2"></i></button>
+                            <!-- Sidebar -->
+                            <div class="lg:w-1/3 mt-12 lg:mt-0">
+                                <!-- Search Widget -->
+                                <div class="bg-white p-6 rounded-lg shadow-sm mb-8">
+                                    <h3 class="text-xl font-bold mb-4">Search</h3>
+                                    <div class="flex">
+                                        <input type="search" id="search-input" placeholder="Search articles..." class="w-full px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                        <button id="search-button" class="bg-gray-700 text-white px-4 py-2 rounded-r-lg hover:bg-gray-800">Search</button>
+                                    </div>
+                                </div>
+                                <!-- Recent Posts Widget -->
+                                <div class="bg-white p-6 rounded-lg shadow-sm">
+                                    <h3 class="text-xl font-bold mb-4">Recent Posts</h3>
+                                    <ul class="space-y-3">
+                                        <li><a href="#social-media" class="text-gray-700 hover:text-blue-600">The Definitive Guide to Social Media Advertising</a></li>
+                                        <li><a href="#web-design" class="text-gray-700 hover:text-blue-600">Modern Web Design: Principles of UI/UX and Development</a></li>
+                                        <li><a href="#ai-agents" class="text-gray-700 hover:text-blue-600">Building Advanced AI Agents: A Practical Guide</a></li>
+                                        <li><a href="#discord-management" class="text-gray-700 hover:text-blue-600">Mastering Discord: From Server Setup to Community Growth</a></li>
+                                        <li><a href="#product-description" class="text-gray-700 hover:text-blue-600">The Art of Persuasion: Writing Product Descriptions That Sell</a></li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </section>
             </div>
 
-            <!-- Social Media Advertising Page -->
-            <div id="social-media-page" class="page hidden">
-                <section class="py-20">
-                    <div class="container mx-auto px-6">
-                        <h2 class="section-title animate-on-scroll">Social Media Advertising</h2>
-                        <p class="section-subtitle animate-on-scroll" style="transition-delay: 150ms;">Powerful ad strategies to connect you with your ideal audience on the world's most popular platforms.</p>
-                        <div class="flex justify-center items-center space-x-4 md:space-x-8 mb-12 text-3xl text-gray-400 animate-on-scroll" style="transition-delay: 300ms;">
-                            <i class="fab fa-youtube" title="YouTube"></i>
-                            <i class="fab fa-instagram" title="Instagram"></i>
-                            <i class="fab fa-facebook" title="Facebook"></i>
-                            <i class="fab fa-tiktok" title="TikTok"></i>
-                            <i class="fab fa-twitter" title="Twitter (X)"></i>
-                        </div>
-                        <!-- Pricing Tiers -->
-                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            <!-- Starter -->
-                            <div id="starter-card" class="glass-card p-8 flex flex-col animate-on-scroll">
-                                <h3 class="text-xl font-bold text-blue-400 mb-2">Starter Ads Setup</h3>
-                                <p class="text-4xl font-extrabold text-white mb-4">$<span id="starter-price">60</span></p>
-                                <p class="text-gray-400 mb-6 min-h-[70px]">Advanced ad campaigns with audience targeting, <span id="starter-delivery">4-day delivery</span>.</p>
-                                <div class="mb-6">
-                                    <label for="fast-delivery-starter" class="flex items-center cursor-pointer">
-                                        <input type="checkbox" id="fast-delivery-starter" onchange="toggleFastDelivery('starter', this)" class="form-checkbox h-5 w-5 text-blue-500 rounded">
-                                        <span class="ml-3 text-white">Fast Delivery (3 days) <span class="text-green-400 font-bold">+ $15</span></span>
-                                    </label>
-                                </div>
-                                <ul class="space-y-4 text-gray-300 mb-8 flex-grow">
-                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>2 platforms, 10,000+ people</li>
-                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>Engagement with prospects</li>
-                                </ul>
-                                <button id="starter-button" onclick="showPaymentModal('Starter Ads Setup', 60, 'https://skrill.me/rq/Nisar%20Ud/60/USD?key=1VDpundqNXS3XPYlg8hxEAGo7zC')" class="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/50 mt-auto">Get Started</button>
-                            </div>
-                            <!-- Standard -->
-                            <div id="growth-card" class="glass-card p-8 flex flex-col border-2 border-blue-500 shadow-2xl shadow-blue-500/20 transform md:scale-105 animate-on-scroll" style="transition-delay: 150ms;">
-                                <p class="text-center font-bold text-white bg-blue-500 rounded-full py-1 px-4 -mt-12 mx-auto">Most Popular</p>
-                                <h3 class="text-xl font-bold text-blue-400 mb-2 mt-4">Growth Accelerator</h3>
-                                <p class="text-4xl font-extrabold text-white mb-4">$<span id="growth-price">170</span></p>
-                                <p class="text-gray-400 mb-6 min-h-[70px]">Run targeted ad campaigns + 2 custom images + ad copy + <span id="growth-delivery">4‑day management</span>.</p>
-                                <div class="mb-6">
-                                    <label for="fast-delivery-growth" class="flex items-center cursor-pointer">
-                                        <input type="checkbox" id="fast-delivery-growth" onchange="toggleFastDelivery('growth', this)" class="form-checkbox h-5 w-5 text-blue-500 rounded">
-                                        <span class="ml-3 text-white">Fast Delivery (3 days) <span class="text-green-400 font-bold">+ $15</span></span>
-                                    </label>
-                                </div>
-                                <ul class="space-y-4 text-gray-300 mb-8 flex-grow">
-                                     <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>4 platforms</li>
-                                     <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>50,000+ people</li>
-                                     <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>Content creation</li>
-                                </ul>
-                                <button id="growth-button" onclick="showPaymentModal('Growth Accelerator', 170, 'https://skrill.me/rq/Nisar%20Ud/170/USD?key=_DFkSpAHspH9D4X_se04ufxp7HS')" class="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/50 mt-auto">Choose Plan</button>
-                            </div>
-                            <!-- Premium -->
-                            <div id="pro-card" class="glass-card p-8 flex flex-col animate-on-scroll" style="transition-delay: 300ms;">
-                                <h3 class="text-xl font-bold text-blue-400 mb-2">Brand Reach Pro</h3>
-                                <p class="text-4xl font-extrabold text-white mb-4">$<span id="pro-price">325</span></p>
-                                <p class="text-gray-400 mb-6 min-h-[70px]">Complete Funnel Targeting + 4 Tailored Ad Images + <span id="pro-delivery">4-day delivery</span> + 10‑Days Expert Oversight.</p>
-                                <div class="mb-6">
-                                    <label for="fast-delivery-pro" class="flex items-center cursor-pointer">
-                                        <input type="checkbox" id="fast-delivery-pro" onchange="toggleFastDelivery('pro', this)" class="form-checkbox h-5 w-5 text-blue-500 rounded">
-                                        <span class="ml-3 text-white">Fast Delivery (3 days) <span class="text-green-400 font-bold">+ $15</span></span>
-                                    </label>
-                                </div>
-                                <ul class="space-y-4 text-gray-300 mb-8 flex-grow">
-                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>8 platforms</li>
-                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>100,000+ people</li>
-                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>Content creation</li>
-                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>Engagement with prospects</li>
-                                </ul>
-                                <button id="pro-button" onclick="showPaymentModal('Brand Reach Pro', 325, 'https://skrill.me/rq/Nisar%20Ud/325/USD?key=wDg-m8alxlsEFlAvAciKXcLoaA0')" class="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/50 mt-auto">Go Pro</button>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+            <!-- Social Media Post -->
+            <div id="page-social-media" class="page">
+                <div class="container mx-auto px-6 py-12">
+                     <article class="prose lg:prose-xl mx-auto bg-white p-8 rounded-lg shadow-sm">
+                        <h1>The Definitive Guide to Social Media Advertising</h1>
+                        <p class="text-gray-600"><strong>Category:</strong> Digital Marketing | <strong>Author:</strong> Rare Insights</p>
+                        <img src="https://placehold.co/800x400/3498db/ffffff?text=Social+Media+Ads" alt="Social Media Advertising" class="w-full rounded-lg my-6">
+                        
+                        <h2>Introduction: Beyond the Boost Button</h2>
+                        <p>Social media advertising has transformed from a niche experiment into a multi-billion dollar industry and a cornerstone of modern digital marketing. With billions of users scrolling through feeds daily, platforms like Meta (Facebook & Instagram), TikTok, LinkedIn, and X (formerly Twitter) offer unparalleled access to targeted audiences. However, true success lies far beyond simply "boosting" a post. That approach is akin to casting a wide, inefficient net. Professional social media advertising is a science, blending data analytics with creative psychology. This guide will provide a comprehensive framework for developing, executing, and optimizing sophisticated social media ad campaigns that deliver measurable results and a significant return on investment (ROI). We will explore the nuances of platform selection, advanced audience segmentation, compelling creative development, and the iterative process of testing and scaling that separates amateur efforts from professional, profit-driving campaigns.</p>
+                        
+                        <h2>Chapter 1: Strategic Planning & Goal Setting</h2>
+                        <p>Before you spend a single dollar, a robust strategy is essential. A campaign without a clear goal is like a ship without a rudder. This foundational stage begins with defining clear, measurable objectives aligned with your overarching business goals.</p>
+                        <h3>The Marketing Funnel on Social Media:</h3>
+                        <p>Every customer journey can be mapped to a marketing funnel. Your ad campaigns must be tailored to the user's specific stage in that journey.</p>
+                        <ul>
+                            <li><strong>Top of Funnel (TOFU) - Awareness:</strong> The goal here is to introduce your brand to a cold audience—people who have never heard of you. Your content should be educational, entertaining, and valuable, with a very soft call-to-action, if any. The aim is to build brand recognition and trust. KPIs include Reach, Impressions, Video Views (especially ThruPlays on Meta), and Ad Recall Lift.</li>
+                            <li><strong>Middle of Funnel (MOFU) - Consideration:</strong> At this stage, you nurture the interest of an audience that is now aware of your brand. They may have visited your website or engaged with a previous ad. The content should be more specific, highlighting your unique value proposition. This is the place for case studies, webinars, free guides, or detailed product showcases. KPIs include Link Clicks, Landing Page Views, Engagement Rate (likes, comments, shares), and Lead Form Submissions.</li>
+                            <li><strong>Bottom of Funnel (BOFU) - Conversion:</strong> This is where you drive the final action from a warm, highly interested audience. These are often people who have added items to their cart or visited your pricing page. Your ads can be more direct, featuring special offers, testimonials, and urgent calls-to-action. The primary KPIs are Return On Ad Spend (ROAS), Cost Per Acquisition (CPA), Purchases, and other specific conversion events.</li>
+                        </ul>
+                         <h3>Choosing the Right Platforms:</h3>
+                        <p>Your target audience dictates your platform choice. A B2B software company will find more success on LinkedIn, where they can target by job title and industry. A trendy fashion brand will thrive on the visual-first environments of Instagram and TikTok. A local service business might leverage Facebook's powerful local targeting features. Research your customer demographics and, more importantly, their psychographics—where they spend their time online and what kind of content they consume. Don't try to be everywhere; master one or two key platforms first before diversifying your efforts.</p>
+
+                        <h2>Chapter 2: Audience Targeting Mastery</h2>
+                        <p>The "secret sauce" of social media advertising is its powerful targeting capabilities. Understanding and utilizing these tools is critical for efficiency and success.</p>
+                        <ul>
+                            <li><strong>Core Audiences:</strong> This is your starting point, but it requires deep thought. Target based on location, demographics (age, gender), and, most importantly, detailed interests and behaviors. Be specific. Instead of "fitness," target "women aged 25-40 who are interested in CrossFit, follow Lululemon, and have recently purchased workout gear online." Layering these interests creates a highly relevant audience segment.</li>
+                            <li><strong>Custom Audiences:</strong> These are your most valuable audiences, created from your own data. This includes uploading customer email lists, targeting people who have visited specific pages on your website (e.g., retargeting users who viewed a product but didn't buy), or creating audiences of users who have watched a certain percentage of your videos or engaged with your social media profile. These are warm audiences with a high propensity to convert.</li>
+                            <li><strong>Lookalike Audiences:</strong> This is how you find new customers and scale your campaigns effectively. Social platforms will analyze your best Custom Audiences (e.g., your list of top-spending customers) and find millions of new users who share similar characteristics and behaviors online. A 1% Lookalike is the most similar and best for high-intent campaigns, while a 5-10% Lookalike provides broader reach for awareness campaigns.</li>
+                        </ul>
+                        <p>A crucial, often overlooked, aspect of audience management is the use of exclusions. To avoid wasting money and annoying potential customers, you must exclude existing buyers from acquisition campaigns. Similarly, when running a top-of-funnel awareness campaign, you should exclude audiences that are already in your middle or bottom-funnel retargeting pools. This segmentation ensures that the right message is delivered to the right person at the right time, preventing message overlap and improving overall campaign efficiency. Proper use of exclusions is a hallmark of an advanced advertising strategy.</p>
+
+                        <h2>Chapter 3: Crafting High-Impact Ad Creative</h2>
+                        <p>In a crowded, fast-scrolling feed, your creative has less than three seconds to capture attention. It must be visually arresting, emotionally resonant, and strategically aligned with your campaign goal.</p>
+                        <h3>Visuals:</h3>
+                        <p>Video is king, especially vertical video for mobile-first platforms like TikTok and Instagram Reels. Your video should deliver its core message within the first 3 seconds, even with the sound off (use captions!). For static images, use high-resolution, vibrant photos that clearly showcase your product or service in a compelling context. User-Generated Content (UGC) and authentic, less-polished creative often outperform slick studio shots because it builds trust and feels native to the platform.</p>
+                        <h3>Ad Copy:</h3>
+                        <p>Follow the AIDA model: <strong>Attention</strong> (a strong, scroll-stopping hook), <strong>Interest</strong> (highlight the primary benefits, not just the features), <strong>Desire</strong> (create an emotional connection, use social proof like testimonials or statistics), and <strong>Action</strong> (a clear, compelling, low-friction call-to-action). Tailor your copy to the audience's stage in the funnel. A TOFU ad should be educational or entertaining, while a BOFU ad can be more direct and promotional, creating a sense of urgency.</p>
+                        <p>Beyond the basics, great ad copy speaks the customer's language. It mirrors their pain points and aspirations back to them, making them feel understood. Before writing, spend time reading customer reviews (both for your product and your competitors'), forum discussions, and social media comments. Note the exact words and phrases they use to describe their problems and desired outcomes. Incorporating this "voice of customer" data into your ad copy will make it resonate on a much deeper level, leading to higher engagement and conversion rates.</p>
+
+                        <h2>Chapter 4: Budgeting, Bidding, and Optimization</h2>
+                        <p>Managing your budget effectively is key to profitability and sustainable growth.</p>
+                        <h3>Bidding Strategies:</h3>
+                        <p>Most platforms offer automated bidding strategies optimized for your chosen goal (e.g., "Maximize Conversions" or "Lowest Cost Per Result"). These are generally effective and a great starting point. Manual bidding (e.g., setting a maximum Cost Per Click or a Bid Cap) offers more control but requires more active management and a deeper understanding of your metrics. Start with automated bidding and experiment with manual as you gather performance data.</p>
+                        <h3>The Power of A/B Testing:</h3>
+                        <blockquote>Never assume you know what will work. The market will tell you what works. Test everything.</blockquote>
+                        <p>Systematically test different variables to find winning combinations. Isolate one variable at a time for clean data. For example, test two different images with the exact same copy and audience. Test different headlines, different calls-to-action, and different audience segments. Let tests run long enough to achieve statistical significance before making a decision. A winning ad is not found, it's built through iterative testing.</p>
+                        <h3>Scaling and Optimization:</h3>
+                        <p>Once you have a winning ad set (a "control") that is consistently delivering results, you can begin to scale the budget. Scale slowly and methodically (e.g., increasing the budget by 20% every few days) to avoid resetting the algorithm's learning phase, which can disrupt performance. Continuously monitor your KPIs. If performance drops, it may be due to ad fatigue (your audience has seen the ad too many times). Be prepared to refresh your creative or test new audiences to keep your campaigns fresh and effective. Optimization is not a one-time task; it's an ongoing process of analysis and refinement.</p>
+                    </article>
+                </div>
+            </div>
+
+            <!-- Web Design Post -->
+            <div id="page-web-design" class="page">
+                 <div class="container mx-auto px-6 py-12">
+                     <article class="prose lg:prose-xl mx-auto bg-white p-8 rounded-lg shadow-sm">
+                        <h1>Modern Web Design: Principles of UI/UX and Development</h1>
+                        <p class="text-gray-600"><strong>Category:</strong> Technology & Design | <strong>Author:</strong> Rare Insights</p>
+                        <img src="https://placehold.co/800x400/2ecc71/ffffff?text=Web+Design" alt="Modern Web Design" class="w-full rounded-lg my-6">
+
+                        <h2>Introduction: More Than Just a Pretty Face</h2>
+                        <p>In the digital-first era, a website is often the first, and most critical, point of contact between a business and its potential customers. A great website is more than just an online brochure or a digital storefront; it's an interactive experience, a powerful marketing engine, and a crucial component of your brand identity. It must be visually appealing, yes, but it must also be intuitive, fast, accessible, and aligned with business objectives. This guide explores the foundational principles of modern web design, covering the critical, symbiotic relationship between User Interface (UI) and User Experience (UX), and the development practices that bring this digital vision to life.</p>
+
+                        <h2>Chapter 1: The Core of UX Design - Understanding the User</h2>
+                        <p>User Experience (UX) is the overall feeling a user has when interacting with your website. It's an evidence-based discipline focused on empathy and designing for human behavior. Good UX is invisible; bad UX is infuriating.</p>
+                        <ul>
+                            <li><strong>User Research & Personas:</strong> The process begins not with design, but with discovery. Understanding your target audience is paramount. Conduct surveys, user interviews, and competitive analysis to gather data. Synthesize this research into detailed user personas—fictional representations of your ideal users, complete with goals, motivations, and pain points. This ensures every design decision is justified by user needs, not personal preference.</li>
+                            <li><strong>Information Architecture (IA):</strong> This is the science of organizing and structuring content in a logical, intuitive way. A solid IA, often visualized through sitemaps and content hierarchies, ensures users can easily find what they're looking for without getting frustrated. It's about creating clear paths and predictable navigation.</li>
+                            <li><strong>User Flows & Wireframing:</strong> User flows are diagrams that map out the exact paths a user takes to complete a specific task (e.g., signing up for a newsletter or making a purchase). Based on these flows, you create wireframes. Wireframes are low-fidelity, black-and-white blueprints of your website, focusing purely on layout, structure, and functionality. This step is crucial for planning the user journey before any visual design elements are introduced.</li>
+                        </ul>
+                        <p>Beyond these basics, advanced UX involves usability testing, where real users are observed interacting with a prototype of the website. This process uncovers unforeseen issues and provides invaluable qualitative feedback. Tools like heatmaps and session recordings on live websites also offer a continuous stream of data on user behavior, highlighting areas of friction or confusion that can be iteratively improved upon. UX is not a one-time phase but a continuous cycle of research, design, testing, and refinement.</p>
+
+                        <h2>Chapter 2: UI Design - Crafting the Visual Interface</h2>
+                        <p>User Interface (UI) design is the visual component of UX. It's the practice of designing the look and feel, the presentation, and the interactivity of a product. It's about creating a beautiful, consistent, and easy-to-use interface that effectively communicates the brand's identity.</p>
+                        <h3>Key UI Principles:</h3>
+                        <ul>
+                            <li><strong>Visual Hierarchy:</strong> This is the art of guiding the user's eye to the most important elements on the page first. It's achieved through strategic use of size, color, contrast, and placement. Your main call-to-action should be the most visually prominent element, making it obvious what the user should do next.</li>
+                            <li><strong>Consistency:</strong> Maintaining a consistent design language—using the same colors, fonts, button styles, and iconography across your entire website—builds trust, reinforces your brand, and reduces cognitive load for the user. They learn how your interface works once and can apply that knowledge everywhere.</li>
+                            <li><strong>Color Theory & Typography:</strong> Colors evoke emotion and can significantly influence user behavior. A well-chosen color palette strengthens brand identity. Typography is the voice of your design; it affects readability and sets the tone for your brand. Choose a limited, clean, and legible font pairing that works well across various devices and sizes.</li>
+                            <li><strong>White Space (Negative Space):</strong> The empty space around elements is not wasted space; it's a powerful design tool. Proper use of white space improves readability, reduces clutter, creates focus, and helps to cultivate a clean, professional, and uncluttered aesthetic.</li>
+                        </ul>
+                        <p>A mature UI design system also includes a component library, which is a collection of reusable UI elements (buttons, forms, cards, etc.). This ensures consistency and dramatically speeds up the design and development process. Furthermore, modern UI design heavily incorporates motion and micro-interactions—subtle animations that provide feedback to the user (e.g., a button changing color on hover, a gentle bounce when an item is added to a cart). These small details make an interface feel more alive, responsive, and delightful to use.</p>
+
+                        <h2>Chapter 3: Responsive Design & Mobile-First Approach</h2>
+                        <blockquote>A website that isn't mobile-friendly is a website that's actively turning away more than half of its potential audience.</blockquote>
+                        <p>With over half of all web traffic consistently coming from mobile devices, a responsive design is non-negotiable. This means your website's layout must fluidly adapt to any screen size, from a small smartphone to a large desktop monitor, providing an optimal experience on all devices. The "mobile-first" approach takes this a step further: you design the mobile version first and then progressively enhance the design for larger screens. This forces you to prioritize the most essential content and functionality, resulting in a leaner, more focused, and faster-loading experience for all users, which is beneficial for both user satisfaction and SEO.</p>
+
+                        <h2>Chapter 4: The Development Stack - Bringing Designs to Life</h2>
+                        <p>Once the design is finalized, it's time for development to turn the static visuals into a living, interactive website. Understanding the basic technologies is helpful for anyone involved in a web project.</p>
+                        <ul>
+                            <li><strong>Frontend (Client-Side):</strong> This is everything the user sees and interacts with in their browser. The core technologies are HTML (the structure and content), CSS (the styling and layout), and JavaScript (the interactivity and dynamic functionality). Modern frontend development often involves powerful frameworks like React, Vue, or Angular to build complex, single-page applications and dynamic user interfaces efficiently.</li>
+                            <li><strong>Backend (Server-Side):</strong> This is the "brains" of the website, the part that users don't see. It handles databases, user authentication, server logic, and processing form submissions. Common backend languages and frameworks include Python (with Django or Flask), PHP (with Laravel), Node.js (with Express), and Ruby (with Rails).</li>
+                            <li><strong>Content Management Systems (CMS):</strong> Platforms like WordPress, Shopify, or modern headless CMSs like Contentful and Strapi provide a user-friendly interface that allows non-technical users to easily manage, update, and publish website content without needing to write a single line of code.</li>
+                        </ul>
+
+                        <h2>Chapter 5: Performance and Accessibility</h2>
+                        <p>A beautiful website is useless if it's slow to load or inaccessible to users with disabilities. These are not afterthoughts; they are core components of quality web design.</p>
+                        <ul>
+                            <li><strong>Web Performance Optimization:</strong> Site speed is a critical factor for both user experience and SEO rankings. Slow-loading sites have higher bounce rates and lower conversion rates. Key optimization techniques include compressing images, minifying code (HTML, CSS, JS), leveraging browser caching, and using a Content Delivery Network (CDN) to serve assets from locations closer to the user.</li>
+                            <li><strong>Accessibility (a11y):</strong> Web accessibility means designing your website to be usable by everyone, including people with visual, auditory, physical, or cognitive impairments. It's both an ethical responsibility and a legal requirement in many places. Follow the Web Content Accessibility Guidelines (WCAG) by using proper semantic HTML (e.g., providing alt text for images, using proper heading structures), ensuring sufficient color contrast, and making your entire site fully navigable via a keyboard alone.</li>
+                        </ul>
+                    </article>
+                </div>
             </div>
             
-            <!-- Product Description Page -->
-            <div id="product-desc-page" class="page hidden">
-                <section class="py-20">
-                    <div class="container mx-auto px-6">
-                        <h2 class="section-title animate-on-scroll">Product Description Writing</h2>
-                        <p class="section-subtitle animate-on-scroll" style="transition-delay: 150ms;">Compelling, SEO-driven product descriptions that captivate customers and drive sales.</p>
-                        <!-- Pricing Tiers -->
-                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
-                            <!-- Basic -->
-                            <div class="glass-card p-8 flex flex-col animate-on-scroll">
-                                <h3 class="text-xl font-bold text-purple-400 mb-2">📝 Simple Writing for Shortlisting</h3>
-                                <p class="text-4xl font-extrabold text-white mb-4">$10</p>
-                                <p class="text-gray-400 mb-6 min-h-[50px]">Includes title, 5 bullets, and a description for your book or listing.</p>
-                                <ul class="space-y-4 text-gray-300 mb-8 flex-grow">
-                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>1-day delivery</li>
-                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>1 product description</li>
-                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>1 title included (per product)</li>
-                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>5 bulletpoint included (per product)</li>
-                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>500 words included (per product)</li>
-                                </ul>
-                                <button onclick="showPaymentModal('Simple Writing for Shortlisting', 10, 'https://skrill.me/rq/Nisar%20Ud/10/USD?key=6QrMz1QNhUHOJYBbn0qjaOWJrAW')" class="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/50 mt-auto">Get Started</button>
-                            </div>
-                            <!-- Standard -->
-                            <div id="product-standard-card" class="glass-card p-8 flex flex-col border-2 border-purple-500 shadow-2xl shadow-purple-500/20 transform md:scale-105 animate-on-scroll" style="transition-delay: 150ms;">
-                                <p class="text-center font-bold text-white bg-purple-500 rounded-full py-1 px-4 -mt-12 mx-auto">Most Popular</p>
-                                <h3 class="text-xl font-bold text-purple-400 mb-2 mt-4">🛍️ Product Listing & Improvement</h3>
-                                <p class="text-4xl font-extrabold text-white mb-4">$<span id="product-standard-price">20</span></p>
-                                <p class="text-gray-400 mb-6 min-h-[50px]">SEO title, 5 bullet points, detailed description, and backend SEO terms.</p>
-                                <div class="mb-6">
-                                    <label for="fast-delivery-product-standard" class="flex items-center cursor-pointer">
-                                        <input type="checkbox" id="fast-delivery-product-standard" onchange="toggleFastDelivery('product-standard', this)" class="form-checkbox h-5 w-5 text-purple-500 rounded">
-                                        <span class="ml-3 text-white">Fast Delivery (1 day) <span class="text-green-400 font-bold">+ $10</span></span>
-                                    </label>
-                                </div>
-                                <ul class="space-y-4 text-gray-300 mb-8 flex-grow">
-                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i><span id="product-standard-delivery">2-day delivery</span></li>
-                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>1 Revision</li>
-                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>5 product descriptions</li>
-                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>1 title included (per product)</li>
-                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>5 bulletpoint included (per product)</li>
-                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>800 words included (per product)</li>
-                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>Competitor research</li>
-                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>HTML title</li>
-                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>SEO Keyword Research</li>
-                                </ul>
-                                <button id="product-standard-button" onclick="showPaymentModal('Product Listing & Improvement', 20, 'https://skrill.me/rq/Nisar%20Ud/20/USD?key=tkKjTlqtP8fMhiH8Fx4MIdZ0_Ln')" class="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/50 mt-auto">Choose Plan</button>
-                            </div>
-                            <!-- Premium -->
-                            <div id="product-premium-card" class="glass-card p-8 flex flex-col animate-on-scroll" style="transition-delay: 300ms;">
-                                <h3 class="text-xl font-bold text-purple-400 mb-2">🎯 Listing Boost + Extra Perks</h3>
-                                <p class="text-4xl font-extrabold text-white mb-4">$<span id="product-premium-price">25</span></p>
-                                <p class="text-gray-400 mb-6 min-h-[50px]">Full SEO Listing, Title, Bullets, Description, Backend & PPC Keywords + Bonuses.</p>
-                                <div class="mb-6">
-                                    <label for="fast-delivery-product-premium" class="flex items-center cursor-pointer">
-                                        <input type="checkbox" id="fast-delivery-product-premium" onchange="toggleFastDelivery('product-premium', this)" class="form-checkbox h-5 w-5 text-purple-500 rounded">
-                                        <span class="ml-3 text-white">Fast Delivery (2 days) <span class="text-green-400 font-bold">+ $10</span></span>
-                                    </label>
-                                </div>
-                                <ul class="space-y-4 text-gray-300 mb-8 flex-grow">
-                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i><span id="product-premium-delivery">3-day delivery</span></li>
-                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>1 Revision</li>
-                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>10 product descriptions</li>
-                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>1 title included (per product)</li>
-                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>5 bulletpoint included (per product)</li>
-                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>1,100 words included (per product)</li>
-                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>Competitor research</li>
-                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>HTML title</li>
-                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>SEO keywords</li>
-                                </ul>
-                                <button id="product-premium-button" onclick="showPaymentModal('Listing Boost + Extra Perks', 25, 'https://skrill.me/rq/Nisar%20Ud/25/USD?key=KNminP-egUoMX_2Cxw4OPH4UNDH')" class="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/50 mt-auto">Go Pro</button>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+            <!-- AI Agents Post -->
+            <div id="page-ai-agents" class="page">
+                <div class="container mx-auto px-6 py-12">
+                     <article class="prose lg:prose-xl mx-auto bg-white p-8 rounded-lg shadow-sm">
+                        <h1>Building Advanced AI Agents: A Practical Guide</h1>
+                        <p class="text-gray-600"><strong>Category:</strong> Artificial Intelligence | <strong>Author:</strong> Rare Insights</p>
+                        <img src="https://placehold.co/800x400/9b59b6/ffffff?text=AI+Agents" alt="Building AI Agents" class="w-full rounded-lg my-6">
+
+                        <h2>Introduction: The Dawn of Autonomous AI</h2>
+                        <p>Artificial Intelligence has moved beyond simple predictive models and chatbots into the exciting and transformative realm of autonomous agents. These are not just programs that respond to inputs; they are sophisticated AI systems designed to perceive their environment, reason, make decisions, and take actions to achieve specific, often complex, goals. From automating intricate business workflows and conducting scientific research to powering the next generation of truly helpful personal assistants, AI agents represent a significant leap forward in our ability to delegate tasks to machines. This guide provides a practical roadmap for understanding, designing, and building the foundational components of advanced AI agents.</p>
+
+                        <h2>Chapter 1: Understanding the Architecture of an AI Agent</h2>
+                        <p>At its core, a modern AI agent is composed of several key components working in a continuous loop, often referred to as an "agentic loop."</p>
+                        <ul>
+                            <li><strong>Perception:</strong> This is the agent's ability to gather information and context from its environment. This environment can be a user's prompt, a database, a set of documents, real-time data from APIs, or even visual input. The quality of perception is critical for the agent to make informed decisions.</li>
+                            <li><strong>Planning & Reasoning (The "Brain"):</strong> The agent uses a Large Language Model (LLM) like GPT-4 or Google's Gemini as its central processing unit or "brain." The LLM's role is to reason about the current situation, break down a high-level goal into smaller, manageable steps, and create a coherent plan of action. This is where the "thinking" happens.</li>
+                            <li><strong>Memory:</strong> For an agent to be effective, it must remember past interactions and learned information to maintain context. Memory is often implemented in two forms: short-term memory (like a running log of the current conversation) and long-term memory, which is typically implemented using vector databases (like Pinecone, Weaviate, or Chroma) for efficient storage and retrieval of relevant information based on semantic similarity.</li>
+                            <li><strong>Tools:</strong> An LLM by itself is just a text generator; it cannot interact with the outside world. Agents are given access to a curated set of "tools" to overcome this limitation. These tools can be anything from a simple calculator or a currency converter to complex functions for searching the web, sending emails, managing databases, interacting with other software via APIs, or even writing and executing code.</li>
+                        </ul>
+                        <p>The synergy between these components is what makes an agent powerful. The LLM acts as an orchestrator, deciding which tool to use based on its current plan and the information it has perceived or retrieved from memory. The result of the tool's action then becomes a new piece of information for the agent to perceive, allowing it to update its plan and continue the cycle. This iterative process enables agents to handle tasks that are impossible for a standalone LLM to accomplish.</p>
+
+                        <h2>Chapter 2: The Technology Stack</h2>
+                        <p>Building a capable AI agent requires a combination of powerful frameworks, models, and data stores.</p>
+                        <h3>Key Frameworks:</h3>
+                        <ul>
+                            <li><strong>LangChain & LlamaIndex:</strong> These are currently the most popular open-source frameworks for developing applications powered by LLMs. They are not AI models themselves, but rather the "glue" or orchestration layer that connects LLMs with memory, tools, and external data sources. They provide standardized interfaces and pre-built components that vastly simplify the development of complex agentic workflows.</li>
+                            <li><strong>LLMs (The "Brain"):</strong> The choice of LLM is critical and depends on the task's complexity, budget, and performance requirements. Options include proprietary, state-of-the-art models from OpenAI (GPT series), Google (Gemini), and Anthropic (Claude), or powerful open-source models like Meta's Llama 3 or Mistral AI's models, which can be fine-tuned or run locally for greater control and data privacy.</li>
+                        </ul>
+                        <h3>Example: A Simple Research Agent</h3>
+                        <p>Imagine an agent whose high-level goal is to "write a comprehensive report on the future of renewable energy, focusing on solar and wind power." The agentic loop might look like this:</p>
+                        <ol>
+                            <li><strong>Step 1 (Tool: Web Search):</strong> The agent's first planned action is to search for "latest trends in renewable energy 2025."</li>
+                            <li><strong>Step 2 (Memory):</strong> It perceives the search results, reads and summarizes the top 5 articles, and stores the key findings and sources in its long-term vector memory.</li>
+                            <li><strong>Step 3 (Tool: Web Search):</strong> Based on its initial findings, it reasons that it needs more specific data and decides to search for "statistical analysis of challenges in solar power adoption."</li>
+                            <li><strong>Step 4 (Memory):</strong> It again reads, summarizes, and adds this new information to its memory, noting any contradictions or supporting evidence from its previous findings.</li>
+                            <li><strong>Step 5 (Planning/Reasoning):</strong> After several such cycles, the agent determines it has enough information. It retrieves all the relevant, synthesized notes from its memory and formulates a coherent structure for the report.</li>
+                            <li><strong>Step 6 (Action):</strong> It uses its internal capabilities to write the final, well-structured report, citing the sources it recorded in its memory.</li>
+                        </ol>
+
+                        <h2>Chapter 3: The ReAct Framework - Combining Reasoning and Acting</h2>
+                        <blockquote>Reasoning + Acting = Powerful, Transparent Agents</blockquote>
+                        <p>The ReAct (Reasoning and Acting) framework is a powerful and popular paradigm for building more reliable agents. Instead of just outputting an answer, the LLM is prompted to externalize its thought process. It follows a specific format: it first thinks about the problem, then decides on an action (i.e., which tool to use and with what input), and then waits for an observation (the result from the tool). This cycle of **Thought -> Action -> Observation -> Thought...** allows the agent to tackle complex, multi-step tasks dynamically. Crucially, it also allows the agent to recognize if a tool failed or returned an unexpected result, and then self-correct its plan. This makes the agent's behavior more robust, reliable, and much easier for developers to debug.</p>
+
+                        <h2>Chapter 4: Practical Implementation Steps</h2>
+                        <p>Let's outline a high-level process for building your own agent using a framework like LangChain.</p>
+                        <ol>
+                            <li><strong>Define the Goal:</strong> Be very specific about what you want your agent to accomplish. A vague goal will lead to poor performance.</li>
+                            <li><strong>Select & Define Your Tools:</strong> What capabilities does your agent need to achieve its goal? Define Python functions for each tool (e.g., `search_web(query)`, `send_email(recipient, subject, body)`) and provide clear descriptions so the LLM understands what each tool does.</li>
+                            <li><strong>Choose Your LLM and Framework:</strong> Set up your development environment with LangChain or a similar framework and connect to your chosen LLM via its API key.</li>
+                            <li><strong>Initialize the Agent:</strong> Use the framework to combine your LLM, your defined tools, and a prompt template (like one designed for the ReAct framework) into an "agent executor."</li>
+                            <li><strong>Implement the Agent Loop:</strong> The framework handles the agentic loop. You simply invoke the agent with the initial goal, and it will begin the ReAct cycle until it determines the task is complete.</li>
+                            <li><strong>Testing and Iteration:</strong> Rigorously test your agent with a wide variety of inputs and scenarios. Debugging is crucial. Analyze the agent's "thoughts" and action logs to understand its decision-making process and refine your prompts, tool descriptions, or the tools themselves to improve performance.</li>
+                        </ol>
+
+                        <h2>Chapter 5: The Future and Ethical Considerations</h2>
+                        <p>The field of AI agents is evolving at an explosive pace. We are moving towards multi-agent systems where different specialized agents can collaborate, negotiate, and delegate tasks to solve even more complex problems. However, this immense power comes with significant responsibility. It's crucial to consider the ethical implications: How do we prevent agents from being used for malicious purposes like generating spam or disinformation? How do we ensure they are reliable and don't produce harmful, biased, or factually incorrect outputs? How do we handle data privacy when agents can access personal information? Building safe, transparent, and controllable agents with robust guardrails and human oversight is the most significant challenge and opportunity in this exciting new technological frontier.</p>
+                    </article>
+                </div>
             </div>
 
-            <!-- Website Creation Page -->
-            <div id="website-creation-page" class="page hidden">
-                <section class="py-20">
-                    <div class="container mx-auto px-6">
-                        <h2 class="section-title animate-on-scroll">Website Creation</h2>
-                        <p class="section-subtitle animate-on-scroll" style="transition-delay: 150ms;">Get a professional, responsive website with a full admin panel and e-commerce capabilities to grow your online presence.</p>
-                        <!-- Pricing Tiers -->
-                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
-                            <!-- Basic -->
-                            <div class="glass-card p-8 flex flex-col animate-on-scroll">
-                                <h3 class="text-xl font-bold text-green-400 mb-2">Basic</h3>
-                                <p class="text-4xl font-extrabold text-white mb-4">$15</p>
-                                <p class="text-gray-400 mb-6 min-h-[70px]">Responsive Website with admin panel. Upto 3 Pages website + Mobile Friendly + Admin Panel + Plugins + Video Tutorial + Contact form.</p>
-                                <ul class="space-y-4 text-gray-300 mb-8 flex-grow">
-                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>3 days delivery</li>
+            <!-- Discord Management Post -->
+            <div id="page-discord-management" class="page">
+                <div class="container mx-auto px-6 py-12">
+                     <article class="prose lg:prose-xl mx-auto bg-white p-8 rounded-lg shadow-sm">
+                        <h1>Mastering Discord: From Server Setup to Community Growth</h1>
+                        <p class="text-gray-600"><strong>Category:</strong> Community Management | <strong>Author:</strong> Rare Insights</p>
+                        <img src="https://placehold.co/800x400/7289da/ffffff?text=Discord+Management" alt="Discord Server Management" class="w-full rounded-lg my-6">
+
+                        <h2>Introduction: The Power of Community</h2>
+                        <p>Discord has evolved far beyond its origins as a gamer-centric chat app. Today, it stands as a premier platform for building vibrant, engaged, and loyal online communities for brands, creators, educational groups, and hobbyists alike. A well-managed Discord server can become the central hub for your audience, fostering direct, real-time communication, deeper relationships, and a powerful sense of belonging that is difficult to replicate on other social media platforms. This comprehensive guide covers everything you need to know to create a professional server, manage it effectively, and grow a thriving community from the ground up.</p>
+
+                        <h2>Chapter 1: The Blueprint - Planning Your Server</h2>
+                        <p>Before you create a single channel, a strategic plan is essential for long-term success. A haphazardly thrown-together server will confuse new members and be a nightmare to manage.</p>
+                        <ul>
+                            <li><strong>Define Your Purpose & Value Proposition:</strong> Why should someone join your community? What unique value will they get? Is it for exclusive content, direct access to you, customer support, networking with peers, or a place for fans to connect? Your purpose will define your server's entire structure, rules, and content strategy.</li>
+                            <li><strong>Channel Architecture:</strong> Don't overwhelm new members with 50 empty channels. Start with a clean, logical structure. Use categories to group related channels. A solid starting structure includes:
+                                <ul>
+                                    <li><strong>START HERE Category:</strong> A welcome channel, a detailed rules channel, an announcements channel (read-only for members), and a role-selection channel.</li>
+                                    <li><strong>COMMUNITY Category:</strong> A general chat channel, an introductions channel, and channels for sharing media or memes.</li>
+                                    <li><strong>TOPIC-SPECIFIC Category:</strong> Channels dedicated to the core topics of your community (e.g., #social-media-discussion, #ai-questions).</li>
+                                    <li><strong>VOICE CHANNELS:</strong> A general voice lobby and specific channels for events or small group chats.</li>
                                 </ul>
-                                <button onclick="showPaymentModal('Website Creation - Basic', 15, 'https://skrill.me/rq/Nisar%20Ud/15/USD?key=sTwYvpJYw4Q40heJTDLrPzby-nH')" class="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/50 mt-auto">Get Started</button>
-                            </div>
-                            <!-- Standard -->
-                            <div class="glass-card p-8 flex flex-col border-2 border-green-500 shadow-2xl shadow-green-500/20 transform md:scale-105 animate-on-scroll" style="transition-delay: 150ms;">
-                                <p class="text-center font-bold text-white bg-green-500 rounded-full py-1 px-4 -mt-12 mx-auto">Most Popular</p>
-                                <h3 class="text-xl font-bold text-green-400 mb-2 mt-4">Standard</h3>
-                                <p class="text-4xl font-extrabold text-white mb-4">$30</p>
-                                <p class="text-gray-400 mb-6 min-h-[70px]">I will create mobile & tablet friendly wordpress responsive website for you with admin panel.</p>
-                                <ul class="space-y-4 text-gray-300 mb-8 flex-grow">
-                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>4 days delivery</li>
-                                </ul>
-                                <button onclick="showPaymentModal('Website Creation - Standard', 30, 'https://skrill.me/rq/Nisar%20Ud/30/USD?key=gxJlkfOOejB0-k-yXh_-F0xf1yJ')" class="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/50 mt-auto">Choose Plan</button>
-                            </div>
-                            <!-- Premium -->
-                            <div class="glass-card p-8 flex flex-col animate-on-scroll" style="transition-delay: 300ms;">
-                                <h3 class="text-xl font-bold text-green-400 mb-2">Premium</h3>
-                                <p class="text-4xl font-extrabold text-white mb-4">$60</p>
-                                <p class="text-gray-400 mb-6 min-h-[70px]">Standard Package + ecommerce online store(paypal) integration and 1 week support. 10 pages max.</p>
-                                <ul class="space-y-4 text-gray-300 mb-8 flex-grow">
-                                    <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-3"></i>10 days delivery</li>
-                                </ul>
-                                <button onclick="showPaymentModal('Website Creation - Premium', 60, 'https://skrill.me/rq/Nisar%20Ud/60/USD?key=0OPx1Q63oAfGnUG8jCwmpG7Omuj')" class="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/50 mt-auto">Go Pro</button>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                            </li>
+                            <li><strong>Role & Permission Structure:</strong> Roles are the backbone of server management and security. Plan your roles carefully from the outset. A typical hierarchy might be: Admin, Moderator, Subject Matter Expert, VIP/Subscriber, and Member. Configure the permissions for each role meticulously at the server and channel level to ensure security and a smooth user experience. For example, only Admins and Mods should have the ability to ban members or delete messages.</li>
+                        </ul>
+                        <p>A well-planned server structure not only improves navigation but also enhances the user experience by reducing clutter and guiding members to relevant conversations. Consider using channel topics and pins to highlight important information within each channel. As your community grows, you can add more specialized channels, but always prioritize clarity and ease of use over having a vast number of inactive channels. A clean, organized server is a welcoming server.</p>
+
+                        <h2>Chapter 2: Server Setup and Configuration</h2>
+                        <p>Now it's time to build your server with a focus on user experience and security.</p>
+                        <h3>The Essentials:</h3>
+                        <ul>
+                            <li><strong>Welcome Screen & Onboarding:</strong> Configure Discord's built-in Onboarding feature. This allows you to create a customized welcome screen and ask new members questions to automatically assign them relevant channels and roles, personalizing their initial experience.</li>
+                            <li><strong>Verification System:</strong> Implement a verification gate to deter bots and spammers. A simple and effective method is to use a bot to require new users to click a reaction emoji in the #rules channel to gain access to the rest of the server. This one step can eliminate a huge percentage of automated raids.</li>
+                            <li><strong>Clear and Comprehensive Rules:</strong> Your rules should be clear, concise, easy to understand, and prominently displayed. They set the tone for your community's culture and give your moderators a clear, objective framework for enforcement. Cover topics like respect, spam, self-promotion, and NSFW content.</li>
+                        </ul>
+
+                        <h2>Chapter 3: Automation and Moderation with Bots</h2>
+                        <blockquote>Good moderation is 90% proactive and 10% reactive. Bots are your first and most tireless line of defense.</blockquote>
+                        <p>Manually managing a server of any significant size is impossible. Bots are absolutely essential for automation, moderation, and adding engaging features.</p>
+                        <h3>Must-Have Bots:</h3>
+                        <ul>
+                            <li><strong>Moderation Bot (e.g., MEE6, Dyno, ProBot):</strong> These are the workhorses of your server. Configure them for auto-moderation (banning certain words, detecting spam links, preventing excessive caps/mentions), logging all administrative actions (kicks, bans, deleted messages) in a private channel, and allowing your human moderators to easily issue warnings, mutes, or kicks with simple commands.</li>
+                            <li><strong>Welcome & Role Management Bot (e.g., MEE6, Carl-bot):</strong> To automatically send a customized welcome message to new members in a specific channel, and to set up "reaction roles" where users can click an emoji to be assigned a specific role and gain access to corresponding channels.</li>
+                            <li><strong>Utility/Fun Bots:</strong> Bots for creating polls (Simple Poll), creating custom embeds for announcements (Carl-bot), playing music, or hosting games can add a layer of fun and engagement that keeps your community active and entertained.</li>
+                        </ul>
+
+                        <h2>Chapter 4: Fostering Engagement and Community Growth</h2>
+                        <p>A beautifully designed server is nothing without an active, engaged community. Building that takes consistent effort.</p>
+                        <h3>Engagement Strategies:</h3>
+                        <ul>
+                            <li><strong>Host Regular, Predictable Events:</strong> Schedule weekly or bi-weekly events. Consistency is key. These could be voice chat Q&A sessions, expert interviews, movie nights, gaming tournaments, or educational workshops. Create events in Discord so members get notifications.</li>
+                            <li><strong>Be the Conversation Starter:</strong> Don't wait for conversations to happen. Spark them by asking open-ended questions in your chat channels. Share interesting articles or news relevant to your community and ask for opinions.</li>
+                            <li><strong>Recognize and Reward Active Members:</strong> Create special roles (e.g., "Community Pillar") or private channels for your most active and helpful members. Publicly acknowledge their contributions. This makes them feel valued and encourages others to participate.</li>
+                            <li><strong>Be Present and Authentic:</strong> As the community owner, your presence is vital, especially in the early stages. Participate in conversations, answer questions, and show your members you are genuinely invested in the community's success.</li>
+                        </ul>
+                        <p>Remember that engagement is a two-way street. Actively listen to your community's feedback and suggestions. Use polls to let them have a say in future events or server changes. When members feel heard and see their ideas implemented, their sense of ownership and loyalty to the community deepens significantly. This feedback loop is crucial for long-term health and growth.</p>
+
+                        <h2>Chapter 5: Advanced Server Management</h2>
+                        <p>As your community grows, your management challenges will become more complex. You need to scale your operations.</p>
+                        <ul>
+                            <li><strong>Build a Moderation Team:</strong> You cannot and should not moderate alone. Recruit a team of moderators from your most trusted, level-headed, and active community members. Create a detailed moderation guide and a private channel for your team to coordinate, discuss difficult cases, and ensure consistent rule enforcement.</li>
+                            <li><strong>Leverage Server Insights:</strong> Use Discord's built-in Server Insights to track key metrics like member growth, sources of new members, engagement levels, and retention rates. Analyze this data to understand what's working and what's not, and make data-driven decisions about your content and engagement strategy.</li>
+                            <li><strong>Develop Conflict Resolution Protocols:</strong> Sooner or later, disputes between members will arise. Develop clear, private protocols for handling these situations. Your goal is to de-escalate, listen to all sides, and find a fair resolution that upholds your community rules. A private ticket system using a bot can be invaluable for this.</li>
+                        </ul>
+                    </article>
+                </div>
             </div>
 
-            <!-- Discord Management Page -->
-            <div id="discord-page" class="page hidden">
-                <section class="py-20">
-                    <div class="container mx-auto px-6">
-                        <h2 class="section-title animate-on-scroll">Discord Server Management</h2>
-                        <p class="section-subtitle animate-on-scroll" style="transition-delay: 150ms;">Expert setup and management for a secure, engaging, and professional Discord server tailored to your community.</p>
-                        <!-- Pricing Tiers -->
-                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
-                            <!-- Basic -->
-                            <div class="glass-card p-8 flex flex-col animate-on-scroll">
-                                <h3 class="text-xl font-bold text-indigo-400 mb-2">Basic</h3>
-                                <p class="text-4xl font-extrabold text-white mb-4">$5</p>
-                                <ul class="space-y-4 text-gray-300 mb-8 flex-grow">
-                                    <li class="flex items-start"><i class="fas fa-check-circle text-green-400 mr-3 mt-1"></i><span>1-day delivery</span></li>
-                                    <li class="flex items-start"><i class="fas fa-check-circle text-green-400 mr-3 mt-1"></i><span>Custom Voice/Text Channels</span></li>
-                                    <li class="flex items-start"><i class="fas fa-check-circle text-green-400 mr-3 mt-1"></i><span>Unlimited Roles & Permissions Setup</span></li>
-                                    <li class="flex items-start"><i class="fas fa-check-circle text-green-400 mr-3 mt-1"></i><span>Auto Moderation Bots</span></li>
-                                    <li class="flex items-start"><i class="fas fa-check-circle text-green-400 mr-3 mt-1"></i><span>Welcome image with text</span></li>
-                                    <li class="flex items-start"><i class="fas fa-check-circle text-green-400 mr-3 mt-1"></i><span>Music Bot & Channel</span></li>
-                                    <li class="flex items-start"><i class="fas fa-check-circle text-green-400 mr-3 mt-1"></i><span>Server Stats & Audit Log</span></li>
-                                    <li class="flex items-start"><i class="fas fa-check-circle text-green-400 mr-3 mt-1"></i><span>Auto Twitter/YouTube/Twitch Alerts</span></li>
-                                    <li class="flex items-start"><i class="fas fa-check-circle text-green-400 mr-3 mt-1"></i><span>Private Staff Area</span></li>
-                                    <li class="flex items-start"><i class="fas fa-check-circle text-green-400 mr-3 mt-1"></i><span>Giveaway & Polling System</span></li>
-                                </ul>
-                                <button onclick="showPaymentModal('Discord Basic', 5, 'https://skrill.me/rq/Nisar%20Ud/5/USD?key=9zURoUta8juRiVuc-5GJN7feh78')" class="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/50 mt-auto">Get Started</button>
-                            </div>
-                            <!-- Standard -->
-                            <div id="discord-standard-card" class="glass-card p-8 flex flex-col border-2 border-indigo-500 shadow-2xl shadow-indigo-500/20 transform md:scale-105 animate-on-scroll" style="transition-delay: 150ms;">
-                                <p class="text-center font-bold text-white bg-indigo-500 rounded-full py-1 px-4 -mt-12 mx-auto">Most Popular</p>
-                                <h3 class="text-xl font-bold text-indigo-400 mb-2 mt-4">Standard</h3>
-                                <p class="text-4xl font-extrabold text-white mb-4">$<span id="discord-standard-price">10</span></p>
-                                <div class="mb-6">
-                                    <label for="fast-delivery-discord-standard" class="flex items-center cursor-pointer">
-                                        <input type="checkbox" id="fast-delivery-discord-standard" onchange="toggleFastDelivery('discord-standard', this)" class="form-checkbox h-5 w-5 text-indigo-500 rounded">
-                                        <span class="ml-3 text-white">Fast Delivery (1 day) <span class="text-green-400 font-bold">+ $5</span></span>
-                                    </label>
-                                </div>
-                                <p class="text-gray-200 mb-4 font-semibold"><i class="fas fa-star text-yellow-400 mr-2"></i>Everything from Basic</p>
-                                <ul class="space-y-4 text-gray-300 mb-8 flex-grow">
-                                    <li class="flex items-start"><i class="fas fa-star text-yellow-400 mr-3 mt-1"></i><span><span id="discord-standard-delivery">2-day delivery</span></span></li>
-                                    <li class="flex items-start"><i class="fas fa-star text-yellow-400 mr-3 mt-1"></i><span>Epic Server Design with Emojis</span></li>
-                                    <li class="flex items-start"><i class="fas fa-star text-yellow-400 mr-3 mt-1"></i><span>Verification System</span></li>
-                                    <li class="flex items-start"><i class="fas fa-star text-yellow-400 mr-3 mt-1"></i><span>Embedded Rules with Banner</span></li>
-                                    <li class="flex items-start"><i class="fas fa-star text-yellow-400 mr-3 mt-1"></i><span>Level System & Invite Tracking</span></li>
-                                    <li class="flex items-start"><i class="fas fa-star text-yellow-400 mr-3 mt-1"></i><span>Self Roles & Server Logs</span></li>
-                                    <li class="flex items-start"><i class="fas fa-star text-yellow-400 mr-3 mt-1"></i><span>Static & Animated Emojis</span></li>
-                                </ul>
-                                <button id="discord-standard-button" onclick="showPaymentModal('Discord Standard', 10, 'https://skrill.me/rq/Nisar%20Ud/10/USD?key=E7gI_4kzRNlQc3RiNrHeXBnj-bh')" class="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/50 mt-auto">Choose Plan</button>
-                            </div>
-                            <!-- Premium -->
-                            <div id="discord-premium-card" class="glass-card p-8 flex flex-col animate-on-scroll" style="transition-delay: 300ms;">
-                                <h3 class="text-xl font-bold text-indigo-400 mb-2">Premium</h3>
-                                <p class="text-4xl font-extrabold text-white mb-4">$<span id="discord-premium-price">20</span></p>
-                                <div class="mb-6">
-                                    <label for="fast-delivery-discord-premium" class="flex items-center cursor-pointer">
-                                        <input type="checkbox" id="fast-delivery-discord-premium" onchange="toggleFastDelivery('discord-premium', this)" class="form-checkbox h-5 w-5 text-indigo-500 rounded">
-                                        <span class="ml-3 text-white">Fast Delivery (2 days) <span class="text-green-400 font-bold">+ $5</span></span>
-                                    </label>
-                                </div>
-                                <p class="text-gray-200 mb-4 font-semibold"><i class="fas fa-crown text-amber-400 mr-2"></i>Everything from Standard</p>
-                                <ul class="space-y-4 text-gray-300 mb-8 flex-grow">
-                                    <li class="flex items-start"><i class="fas fa-crown text-amber-400 mr-3 mt-1"></i><span><span id="discord-premium-delivery">3-day</span> delivery</span></li>
-                                    <li class="flex items-start"><i class="fas fa-crown text-amber-400 mr-3 mt-1"></i><span>Support System (Tickets)</span></li>
-                                    <li class="flex items-start"><i class="fas fa-crown text-amber-400 mr-3 mt-1"></i><span>Anti-Raid & Spam Protection</span></li>
-                                    <li class="flex items-start"><i class="fas fa-crown text-amber-400 mr-3 mt-1"></i><span>Game Patch Updates</span></li>
-                                    <li class="flex items-start"><i class="fas fa-crown text-amber-400 mr-3 mt-1"></i><span>Color Self Roles</span></li>
-                                    <li class="flex items-start"><i class="fas fa-crown text-amber-400 mr-3 mt-1"></i><span>AI Bot Setup</span></li>
-                                    <li class="flex items-start"><i class="fas fa-crown text-amber-400 mr-3 mt-1"></i><span>Temporary Voice/Text Channels</span></li>
-                                    <li class="flex items-start"><i class="fas fa-crown text-amber-400 mr-3 mt-1"></i><span>Fun Bots (Aki, Counter, Pokémon)</span></li>
-                                    <li class="flex items-start"><i class="fas fa-crown text-amber-400 mr-3 mt-1"></i><span>After Delivery Technical Support</span></li>
-                                    <li class="flex items-start"><i class="fas fa-crown text-amber-400 mr-3 mt-1"></i><span>Server Backup System</span></li>
-                                </ul>
-                                <button id="discord-premium-button" onclick="showPaymentModal('Discord Premium', 20, 'https://skrill.me/rq/Nisar%20Ud/20/USD?key=FoyeSmlaMukYaiOc3v-jzEE6-Bs')" class="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/50 mt-auto">Go Pro</button>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+            <!-- Product Description Post -->
+            <div id="page-product-description" class="page">
+                <div class="container mx-auto px-6 py-12">
+                     <article class="prose lg:prose-xl mx-auto bg-white p-8 rounded-lg shadow-sm">
+                        <h1>The Art of Persuasion: Writing Product Descriptions That Sell</h1>
+                        <p class="text-gray-600"><strong>Category:</strong> E-commerce & Copywriting | <strong>Author:</strong> Rare Insights</p>
+                        <img src="https://placehold.co/800x400/f39c12/ffffff?text=Product+Descriptions" alt="Writing Product Descriptions" class="w-full rounded-lg my-6">
+
+                        <h2>Introduction: Your 24/7 Digital Salesperson</h2>
+                        <p>In the hyper-competitive world of e-commerce, your product page is your digital storefront, and your product description is your most valuable salesperson. It works tirelessly, 24/7, to inform, persuade, and convert browsers into buyers. A weak, uninspired, or feature-only description can lead to high bounce rates, abandoned carts, and lost sales. Conversely, a compelling, benefit-driven, and psychologically-informed description can significantly boost your conversion rate and build brand loyalty. This comprehensive guide delves into the psychology, SEO, and creative techniques behind writing product descriptions that don't just describe a product—they sell an experience.</p>
+
+                        <h2>Chapter 1: Know Your Audience, Know Your Product</h2>
+                        <p>The foundation of all great copy is a deep, empathetic understanding of who you're talking to and what you're selling. You cannot persuade someone you don't understand.</p>
+                        <ul>
+                            <li><strong>Create a Detailed Buyer Persona:</strong> Who is your ideal customer? Go beyond basic demographics. What are their deep-seated pain points, their aspirations, their desires, and their motivations? What kind of language do they use? What are their values? What hesitations might they have? Write for this specific person, not a generic, faceless audience. Your copy should feel like a one-on-one conversation.</li>
+                            <li><strong>Features vs. Benefits: The Golden Rule:</strong> This is the most crucial concept in copywriting. A feature is a factual statement about what your product *is* or *has* (e.g., "This laptop has a 16-inch Retina display"). A benefit is what the user *gets* or *feels* as a result of that feature (e.g., "Experience stunning, true-to-life visuals that make your work and entertainment more immersive than ever before"). Customers don't buy features; they buy better versions of themselves. Always translate features into compelling benefits.</li>
+                        </ul>
+
+                        <h2>Chapter 2: The Psychology of a Purchase</h2>
+                        <p>Effective copywriting taps into proven psychological triggers to make your offer more persuasive and compelling.</p>
+                        <ul>
+                            <li><strong>Social Proof:</strong> Humans are social creatures who look to others for cues on how to behave. Incorporate elements of social proof directly into your descriptions. This can include customer reviews, star ratings, direct quotes from testimonials, or mentions like "bestseller," "customer favorite," or "over 10,000 sold." This builds trust and reduces purchase anxiety.</li>
+                            <li><strong>Scarcity & Urgency:</strong> The fear of missing out (FOMO) is a powerful motivator. Use genuine scarcity and urgency to encourage immediate action. Phrases like "limited edition," "only 5 left in stock," or "sale ends tonight" can prompt a customer who is on the fence to make a decision.</li>
+                            <li><strong>Overcome Objections & Build Trust:</strong> Anticipate your customer's doubts and address them directly and honestly in the copy. Is the product expensive? Justify the cost by highlighting its premium materials, durability, or the value it provides. Are they worried about the fit of a garment? Provide a detailed size guide, customer photos, and a hassle-free return policy. Addressing objections proactively builds credibility and trust.</li>
+                        </ul>
+                        <p>Another powerful psychological principle is the concept of "future pacing." This involves using language that helps the customer imagine their life *after* they've purchased the product. By painting a vivid picture of their success, happiness, or solved problem, you make the purchase feel less like a transaction and more like an investment in their future self. This technique, combined with strong benefit statements, creates a powerful emotional pull that is difficult to resist.</p>
+
+                        <h2>Chapter 3: SEO for Product Pages</h2>
+                        <p>The most persuasive description in the world is useless if no one ever finds it. Your description needs to be optimized for search engines before it can be read by customers.</p>
+                        <ul>
+                            <li><strong>Strategic Keyword Research:</strong> Use tools like Google Keyword Planner, Ahrefs, or SEMrush to find the primary and secondary keywords your customers are actually searching for. Think about user intent. Are they looking for information ("best running shoes") or are they ready to buy ("buy Nike Air Zoom Pegasus 40")?</li>
+                            <li><strong>On-Page SEO Best Practices:</strong> Naturally and strategically integrate your primary keyword into your product title (H1 tag), the URL slug, and within the first paragraph of your description. Use secondary, related keywords (LSI keywords) throughout the copy to provide context to search engines. Also, optimize your product images with descriptive alt text that includes your keyword.</li>
+                            <li><strong>Unique Content is Non-Negotiable:</strong> Never, ever use the manufacturer's default description. This creates duplicate content, which is penalized by Google and will harm your search rankings. Write 100% unique, valuable, and descriptive content for every single product on your site.</li>
+                        </ul>
+
+                        <h2>Chapter 4: A Formula for High-Converting Copy</h2>
+                        <p>While creativity is key, a proven structure can make the writing process easier and far more effective. This formula ensures you hit all the key persuasive points.</p>
+                        <ol>
+                            <li><strong>The Compelling Headline (H1):</strong> Your product title should be clear, benefit-oriented, and include your main keyword. For example, instead of "Leather Wallet," try "The Minimalist RFID-Blocking Leather Wallet for Modern Professionals."</li>
+                            <li><strong>The Engaging Introduction:</strong> Start with a short, 2-3 sentence paragraph that connects with the customer's core problem or desire and sets an emotional scene.</li>
+                            <li><strong>Scannable, Benefit-Driven Bullet Points:</strong> Most users will skim before they read. Use a set of bullet points near the top of the page to highlight the top 3-5 benefits of your product. Start each bullet point with a bolded word that summarizes the benefit.</li>
+                            <li><strong>The Mini-Story & Deeper Dive:</strong> In the main body of the description, tell a story. Paint a vivid picture of the customer using and benefiting from your product. Use sensory language (words related to sight, sound, touch, taste, and smell) to make the experience more tangible.</li>
+                            <li><strong>The "Imagine" Technique:</strong> A powerful storytelling tool. Start sentences with "Imagine..." to help the customer visualize themselves with the product in their life (e.g., "Imagine waking up with more energy and focus after the best night's sleep of your life...").</li>
+                            <li><strong>The Strong, Clear Call-to-Action (CTA):</strong> Don't be passive. End your description with a clear, confident instruction that reinforces the value, like "Add to Cart & Transform Your Mornings."</li>
+                        </ol>
+                        <p>To enhance this formula, consider adding a "Perfect For..." section. This explicitly calls out your ideal customer, making them feel seen and understood (e.g., "Perfect for busy professionals, frequent travelers, and anyone who values security and style."). This simple addition can significantly increase the relevance of your copy for your target audience, making them more likely to feel that the product is truly "for them."</p>
+
+                        <h2>Chapter 5: Formatting for Readability and Impact</h2>
+                        <blockquote>If your copy looks like a chore to read, it won't get read. Great formatting is the key to engagement.</blockquote>
+                        <p>Break up your text into short, easy-to-read paragraphs (2-3 sentences max). Use headings and subheadings to structure your content logically. Use **bold text** to emphasize key benefits and keywords. Use bullet points and numbered lists to make information easily scannable. A wall of text is intimidating and will cause users to bounce. Make your copy visually inviting and effortless to consume on any device, especially mobile.</p>
+                    </article>
+                </div>
             </div>
 
-            <!-- Reviews Section -->
-            <section id="reviews" class="py-20 bg-black bg-opacity-20">
-                <div class="container mx-auto px-6">
-                    <h2 class="section-title animate-on-scroll">What Our Clients Say</h2>
-                    <p class="section-subtitle animate-on-scroll" style="transition-delay: 150ms;">We pride ourselves on delivering exceptional results. Here's what our clients have to say about their experience.</p>
-                    
-                    <!-- Add Review Form -->
-                    <div class="glass-card p-8 max-w-2xl mx-auto mb-12 mt-8 animate-on-scroll">
-                        <h3 class="text-2xl font-bold text-center text-white mb-6">Leave a Review</h3>
-                        <form id="review-form">
-                            <div class="mb-4">
-                                <label for="review-name" class="block text-gray-300 mb-2">Your Name</label>
-                                <input type="text" id="review-name" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                            </div>
-                            <div class="mb-4">
-                                <label class="block text-gray-300 mb-2">Your Rating</label>
-                                <div id="review-stars" class="star-rating flex items-center text-3xl">
-                                    <i class="far fa-star" data-value="1"></i>
-                                    <i class="far fa-star" data-value="2"></i>
-                                    <i class="far fa-star" data-value="3"></i>
-                                    <i class="far fa-star" data-value="4"></i>
-                                    <i class="far fa-star" data-value="5"></i>
-                                </div>
-                            </div>
-                            <div class="mb-6">
-                                <label for="review-feedback" class="block text-gray-300 mb-2">Feedback</label>
-                                <textarea id="review-feedback" rows="4" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required></textarea>
-                            </div>
-                            <button type="submit" class="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/50 w-full">Submit Review</button>
-                        </form>
-                    </div>
-
-                    <!-- Display Reviews -->
-                    <div id="reviews-container" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <!-- Reviews will be dynamically inserted here -->
-                        <p id="no-reviews-message" class="text-gray-400 text-center col-span-full">Be the first to leave a review!</p>
+            <!-- About Us Page Content -->
+            <div id="page-about" class="page">
+                <div class="bg-white">
+                    <div class="container mx-auto px-6 py-12 text-center">
+                        <h1 class="text-4xl md:text-5xl font-extrabold text-gray-800">About Us</h1>
+                        <p class="text-lg text-gray-600 mt-4 max-w-3xl mx-auto">Welcome to Rare Insights, your premier source for expert knowledge on digital marketing, technology, and online community building.</p>
                     </div>
                 </div>
-            </section>
+                
+                <div class="container mx-auto px-6 py-12">
+                    <div class="prose lg:prose-xl mx-auto">
+                        <h2>Our Mission</h2>
+                        <p>At Rare Insights, our mission is to empower creators, entrepreneurs, and businesses with the practical knowledge and strategic insights needed to thrive in the digital age. We cut through the noise to provide clear, in-depth, and actionable guides on the topics that matter most—from leveraging social media and designing beautiful websites to building intelligent AI and fostering vibrant online communities.</p>
+
+                        <h2>Why Choose Rare Insights?</h2>
+                        <ul>
+                            <li><strong>Expert-Led Content:</strong> Our articles are written by industry practitioners with real-world experience in their fields, ensuring you get advice you can trust.</li>
+                            <li><strong>Comprehensive Guides:</strong> We go beyond surface-level tips to provide deep dives into complex topics, giving you a complete understanding from strategy to execution.</li>
+                            <li><strong>Actionable & Practical:</strong> Our focus is on providing practical steps and frameworks that you can implement immediately to see results.</li>
+                            <li><strong>Future-Focused:</strong> We keep a pulse on the future of technology, with dedicated content on emerging fields like AI to keep you ahead of the curve.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Page Content -->
+            <div id="page-contact" class="page">
+                 <div class="container mx-auto px-6 py-12">
+                    <div class="max-w-xl mx-auto bg-white p-8 rounded-lg shadow-sm">
+                        <h1 class="text-3xl font-bold text-center mb-6">Contact Us</h1>
+                        <p class="text-center text-gray-600 mb-8">Have a question, a suggestion for an article, or a collaboration idea? We'd love to hear from you. Please reach out to us via Email or WhatsApp for the quickest response.</p>
+                        <div class="mt-8 text-center">
+                            <div class="space-y-4">
+                                <a href="mailto:rareyt911@gmail.com" class="inline-flex items-center justify-center w-full md:w-auto bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold py-3 px-6 rounded-lg transition duration-300">
+                                    <i class="fas fa-envelope mr-3"></i>
+                                    <span>rareyt911@gmail.com</span>
+                                </a>
+                                <a href="https://wa.me/923409796147" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center w-full md:w-auto bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg transition duration-300">
+                                    <i class="fab fa-whatsapp mr-3"></i>
+                                    <span>+92 340 9796147</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Privacy Policy Page Content -->
+            <div id="page-privacy" class="page">
+                <div class="container mx-auto px-6 py-12">
+                    <article class="prose lg:prose-xl mx-auto bg-white p-8 rounded-lg shadow-sm">
+                        <h1>Privacy Policy</h1>
+                        <p>Last updated: July 26, 2025</p>
+                        <p>This Privacy Policy describes Our policies and procedures on the collection, use and disclosure of Your information when You use the Service and tells You about Your privacy rights and how the law protects You. We use Your Personal data to provide and improve the Service. By using the Service, You agree to the collection and use of information in accordance with this Privacy Policy.</p>
+                        
+                        <h2>Definitions</h2>
+                        <p>For the purposes of this Privacy Policy: <strong>Company</strong> (referred to as either "the Company", "We", "Us" or "Our" in this Agreement) refers to Rare Insights. <strong>Cookies</strong> are small files that are placed on Your computer, mobile device or any other device by a website, containing the details of Your browsing history on that website among its many uses. <strong>Service</strong> refers to the Website. <strong>Website</strong> refers to Rare Insights, accessible from your domain. <strong>You</strong> means the individual accessing or using the Service, or the company, or other legal entity on behalf of which such individual is accessing or using the Service, as applicable.</p>
+
+                        <h2>Collecting and Using Your Personal Data</h2>
+                        <p>While using Our Service, We may ask You to provide Us with certain personally identifiable information that can be used to contact or identify You, such as your email address when you use our contact form. We also collect Usage Data automatically when You use the Service. This may include information such as Your Device's Internet Protocol address (e.g. IP address), browser type, browser version, the pages of our Service that You visit, the time and date of Your visit, the time spent on those pages, unique device identifiers and other diagnostic data.</p>
+                        
+                        <h2>Use of Your Personal Data</h2>
+                        <p>The Company may use Personal Data to provide and maintain our Service, including to monitor the usage of our Service, to manage Your requests to us, and to contact you with updates or informative communications related to the functionalities, products or contracted services, including security updates, when necessary or reasonable for their implementation.</p>
+
+                        <h2>Use of Cookies</h2>
+                        <p>We use cookies and similar tracking technologies to track the activity on Our Service and store certain information. The cookies we use are primarily for functionality and performance. For example, we use a cookie to remember your consent to our privacy policy so that you do not have to provide it on every visit. By using our site, you consent to the use of these cookies. You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent. However, if you do not accept cookies, you may not be able to use some parts of our Service.</p>
+
+                        <h2>Security of Your Personal Data</h2>
+                        <p>The security of Your Personal Data is important to Us, but remember that no method of transmission over the Internet, or method of electronic storage is 100% secure. While We strive to use commercially acceptable means to protect Your Personal Data, We cannot guarantee its absolute security.</p>
+
+                        <h2>Contact Us</h2>
+                        <p>If you have any questions about this Privacy Policy, You can contact us by email: rareyt911@gmail.com</p>
+                    </article>
+                </div>
+            </div>
+
         </main>
 
-        <!-- Footer -->
-        <footer id="contact" class="bg-gray-900 bg-opacity-50 pt-16 pb-8">
+        <!-- Footer: Consistent across all pages -->
+        <footer class="bg-gray-800 text-white pt-16 pb-8">
             <div class="container mx-auto px-6">
-                <div class="grid md:grid-cols-3 gap-8 mb-8">
+                <div class="grid md:grid-cols-3 gap-8 mb-8 text-center md:text-left">
                     <!-- About -->
-                    <div class="animate-on-scroll">
-                        <h4 class="text-xl font-bold text-white mb-4">Rare Service</h4>
-                        <p class="text-gray-400">Your dedicated partner for digital growth. We deliver rare quality and exceptional results.</p>
+                    <div>
+                        <h4 class="text-xl font-bold mb-4">Rare Insights</h4>
+                        <p class="text-gray-400">Your trusted source for expert guides on digital growth.</p>
                     </div>
-                    <!-- Contact Info -->
-                    <div class="animate-on-scroll" style="transition-delay: 150ms;">
-                        <h4 class="text-xl font-bold text-white mb-4">Contact Us</h4>
-                        <ul class="space-y-3 text-gray-400">
-                            <li><i class="fas fa-envelope mr-3 text-blue-400"></i> <a href="mailto:rareyt911@gmail.com" class="hover:text-white">rareyt911@gmail.com</a></li>
-                            <li><i class="fab fa-whatsapp mr-3 text-green-400"></i> <a href="https://wa.me/923409796147" target="_blank" class="hover:text-white">+92 340 9796147</a></li>
+                    <!-- Quick Links -->
+                    <div>
+                        <h4 class="text-xl font-bold mb-4">Quick Links</h4>
+                        <ul class="space-y-3">
+                            <li><a href="#home" class="hover:text-blue-400">Blog</a></li>
+                            <li><a href="#about" class="hover:text-blue-400">About Us</a></li>
+                            <li><a href="#contact" class="hover:text-blue-400">Contact</a></li>
+                            <li><a href="#privacy" class="hover:text-blue-400">Privacy Policy</a></li>
                         </ul>
                     </div>
                     <!-- Social Links -->
-                    <div class="animate-on-scroll" style="transition-delay: 300ms;">
-                        <h4 class="text-xl font-bold text-white mb-4">Follow Us</h4>
-                        <div class="flex space-x-4">
-                            <a href="https://www.facebook.com/profile.php?id=61578205858515" target="_blank" class="text-gray-400 hover:text-blue-500 text-2xl transition"><i class="fab fa-facebook"></i></a>
+                    <div>
+                        <h4 class="text-xl font-bold mb-4">Follow Us</h4>
+                        <div class="flex space-x-4 justify-center md:justify-start">
+                            <a href="https://www.facebook.com/share/19R8Bkqse6/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-blue-500 text-2xl transition"><i class="fab fa-facebook"></i></a>
+                            <a href="https://www.instagram.com/rare_tips69/?next=%2Freel%2FDHbNqggBVCF%2F%3Figsh%3DMXVodW1tOG16ZXE4dw%253D%253D" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-purple-500 text-2xl transition"><i class="fab fa-instagram"></i></a>
                         </div>
                     </div>
                 </div>
-                <div class="border-t border-gray-800 pt-8 text-center text-gray-500">
-                    <p>&copy; 2024 Rare Service. All Rights Reserved.</p>
+                <div class="border-t border-gray-700 pt-8 text-center text-gray-500">
+                    <p>&copy; 2025 Rare Insights. All Rights Reserved.</p>
                 </div>
             </div>
         </footer>
-
     </div>
 
-    <!-- Payment Modal -->
-    <div id="payment-modal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 hidden">
-        <div class="glass-card p-8 rounded-lg max-w-md w-full text-center relative">
-            <button onclick="closePaymentModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
-            <h2 class="text-2xl font-bold text-white mb-2">Complete Your Order</h2>
-            <p class="text-gray-300 mb-6">You've selected: <strong id="modal-service-name" class="text-blue-400"></strong></p>
-            
-            <div id="payment-form">
-                <div class="mb-4">
-                    <label for="buyer-email" class="block text-gray-300 mb-2 text-left">Enter your email to proceed:</label>
-                    <input type="email" id="buyer-email" placeholder="you@example.com" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                </div>
-                
-                <p class="text-lg font-bold text-white mb-4">Total: $<span id="modal-price"></span> USD</p>
-
-                <div class="space-y-4">
-                    <button id="skrill-button" class="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/50 w-full">Pay with Skrill</button>
-                    <button id="nayapay-button" class="btn-secondary w-full">Pay with NayaPay (Pakistan)</button>
-                    <button id="litecoin-button" class="bg-gray-800 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg w-full hidden">Pay with Litecoin (LTC)</button>
-                </div>
-            </div>
-
-            <div id="nayapay-instructions" class="hidden mt-6 p-4 bg-gray-800 rounded-lg border border-yellow-500 text-left">
-                <h4 class="font-bold text-yellow-400 mb-2">NayaPay Instructions</h4>
-                <p class="text-sm text-gray-300">
-                    1. Send payment to NayaPay number: <strong class="text-white">03409796147</strong>
-                    <br>
-                    2. Take a screenshot of your payment confirmation.
-                    <br>
-                    3. Send the screenshot to us on WhatsApp: <a href="https://wa.me/923409796147" target="_blank" class="text-blue-400 hover:underline font-bold">+923409796147</a>
-                </p>
-            </div>
-            <div id="litecoin-instructions" class="hidden mt-6 p-4 bg-gray-800 rounded-lg border border-blue-500 text-left">
-                <h4 class="font-bold text-blue-400 mb-2">Litecoin (LTC) Instructions</h4>
-                <p class="text-sm text-gray-300 break-words">
-                    1. Send payment to address: <strong class="text-white">ltc1qqg7ver40na2xmkwnhvu55mxhfn9c7fhst5vyhr</strong>
-                    <br>
-                    2. Take a screenshot of your payment confirmation.
-                    <br>
-                    3. Send the screenshot to us on WhatsApp: <a href="https://wa.me/923409796147" target="_blank" class="text-blue-400 hover:underline font-bold">+923409796147</a>
-                </p>
+    <!-- Cookie Consent Banner -->
+    <div id="cookie-banner" class="hidden fixed bottom-0 left-0 right-0 bg-gray-800 text-white p-4 shadow-lg z-50 opacity-0">
+        <div class="container mx-auto flex flex-col md:flex-row items-center justify-between">
+            <p class="text-sm mb-4 md:mb-0 md:mr-4">We use cookies to ensure you get the best experience on our website. By continuing to use our site, you acknowledge that you have read and understood our <a href="#privacy" class="text-blue-400 hover:underline">Privacy Policy</a>.</p>
+            <div class="flex-shrink-0">
+                <button id="accept-cookies" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg mr-2">Accept</button>
+                <button id="decline-cookies" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg">Decline</button>
             </div>
         </div>
     </div>
     
-    <!-- Notification Modal -->
-    <div id="notification-modal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-[110] hidden">
-        <div class="glass-card p-8 rounded-lg max-w-sm w-full text-center relative">
-            <h2 id="notification-title" class="text-xl font-bold text-yellow-400 mb-4"></h2>
-            <p id="notification-message" class="text-gray-300 mb-6"></p>
-            <button onclick="closeNotificationModal()" class="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/50">OK</button>
-        </div>
-    </div>
-
-
-    <!-- Firebase SDK -->
-    <script type="module">
-        // Import Firebase modules
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, serverTimestamp, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-
-        // Firebase configuration provided by user
-        const firebaseConfig = {
-            apiKey: "AIzaSyAfrgJa42DC2OeB4oHnY_1x9kYK4VvaQW4",
-            authDomain: "rare-web-ece2a.firebaseapp.com",
-            projectId: "rare-web-ece2a",
-            storageBucket: "rare-web-ece2a.appspot.com",
-            messagingSenderId: "556680350724",
-            appId: "1:556680350724:web:e474966c2f53502a3f3951",
-            measurementId: "G-Z5SKE6ER22"
-        };
-
-        // Initialize Firebase
-        let app, db, auth, userId;
-        
-        try {
-            app = initializeApp(firebaseConfig);
-            db = getFirestore(app);
-            auth = getAuth(app);
-            
-            signInAnonymously(auth)
-                .then((userCredential) => {
-                    userId = userCredential.user.uid;
-                    console.log("Anonymous User ID:", userId);
-                    loadReviews();
-                })
-                .catch((error) => {
-                    console.error("Anonymous sign-in failed:", error);
-                });
-
-        } catch (e) {
-            console.error("Firebase initialization failed:", e);
-            showNotification("Initialization Error", "The website could not connect to its services. Please verify the Firebase configuration.");
-        }
-
-
-        // --- Page Navigation ---
-        const pages = document.querySelectorAll('.page');
-        window.showPage = function(pageId) {
-            const currentPage = Array.from(pages).find(p => !p.classList.contains('hidden'));
-            const newPage = document.getElementById(`${pageId}-page`);
-
-            if (currentPage && currentPage !== newPage) {
-                currentPage.classList.add('fade-out');
-                setTimeout(() => {
-                    currentPage.classList.add('hidden');
-                    currentPage.classList.remove('fade-out');
-                    
-                    newPage.classList.remove('hidden');
-                    void newPage.offsetWidth; 
-                    setupScrollAnimations(newPage);
-                    window.scrollTo(0, 0);
-                }, 400); 
-            } else if (!currentPage) {
-                newPage.classList.remove('hidden');
-                setupScrollAnimations(newPage);
-            }
-        }
-
-        // --- Mobile Menu ---
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        window.toggleMobileMenu = function() {
-            mobileMenu.classList.toggle('hidden');
-        }
-        mobileMenuButton.addEventListener('click', toggleMobileMenu);
-
-        // --- Review System ---
-        const reviewForm = document.getElementById('review-form');
-        const reviewStars = document.getElementById('review-stars').querySelectorAll('.fa-star');
-        const reviewsContainer = document.getElementById('reviews-container');
-        const noReviewsMessage = document.getElementById('no-reviews-message');
-        let currentRating = 0;
-
-        reviewStars.forEach(star => {
-            star.addEventListener('click', () => {
-                currentRating = star.dataset.value;
-                reviewStars.forEach(s => {
-                    s.classList.toggle('fas', s.dataset.value <= currentRating);
-                    s.classList.toggle('far', s.dataset.value > currentRating);
-                    s.classList.toggle('selected', s.dataset.value <= currentRating);
-                });
-            });
-        });
-
-        reviewForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            if (!db) { showNotification("Error", "Database not connected."); return; }
-            if (currentRating === 0) {
-                showNotification("Incomplete", "Please select a star rating before submitting.");
-                return;
-            }
-            const reviewData = {
-                name: document.getElementById('review-name').value,
-                rating: parseInt(currentRating),
-                feedback: document.getElementById('review-feedback').value,
-                createdAt: serverTimestamp()
-            };
-            try {
-                // Public data path
-                await addDoc(collection(db, "reviews"), reviewData);
-                reviewForm.reset();
-                currentRating = 0;
-                reviewStars.forEach(s => { s.classList.remove('fas', 'selected'); s.classList.add('far'); });
-                showNotification("Success", "Thank you for your review!");
-            } catch (error) {
-                console.error("Error adding review: ", error);
-                showNotification("Error", "Sorry, there was an error submitting your review.");
-            }
-        });
-
-        function loadReviews() {
-            if (!db) return;
-            const q = query(collection(db, "reviews"), orderBy("createdAt", "desc"));
-            onSnapshot(q, (snapshot) => {
-                if (snapshot.empty) {
-                    noReviewsMessage.classList.remove('hidden');
-                    reviewsContainer.innerHTML = '';
-                    return;
-                }
-                noReviewsMessage.classList.add('hidden');
-                reviewsContainer.innerHTML = '';
-                snapshot.forEach(doc => {
-                    const review = doc.data();
-                    const reviewEl = document.createElement('div');
-                    reviewEl.className = 'glass-card p-6 animate-on-scroll';
-                    
-                    let starsHTML = '';
-                    for (let i = 1; i <= 5; i++) {
-                        starsHTML += `<i class="fas fa-star ${i <= review.rating ? 'text-amber-400' : 'text-gray-600'}"></i>`;
-                    }
-                    reviewEl.innerHTML = `<div class="flex items-center mb-4"><div class="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-xl mr-4">${review.name.charAt(0).toUpperCase()}</div><div><h4 class="font-bold text-white">${review.name}</h4><div class="text-lg">${starsHTML}</div></div></div><p class="text-gray-300">"${review.feedback}"</p>`;
-                    reviewsContainer.appendChild(reviewEl);
-                });
-                setupScrollAnimations(document.getElementById('reviews'));
-            });
-        }
-        
-        // --- Payment Modal & Notification Modal Logic ---
-        const paymentModal = document.getElementById('payment-modal');
-        const skrillButton = document.getElementById('skrill-button');
-        const nayapayButton = document.getElementById('nayapay-button');
-        const litecoinButton = document.getElementById('litecoin-button');
-        const nayapayInstructions = document.getElementById('nayapay-instructions');
-        const litecoinInstructions = document.getElementById('litecoin-instructions');
-        const notificationModal = document.getElementById('notification-modal');
-        let currentService = {};
-
-        window.showPaymentModal = (serviceName, price, skrillLink) => {
-            currentService = { serviceName, price, skrillLink };
-            document.getElementById('modal-service-name').textContent = serviceName;
-            document.getElementById('modal-price').textContent = price;
-            
-            // Show/hide Litecoin button based on service
-            if(serviceName.toLowerCase().includes('discord')) {
-                litecoinButton.classList.remove('hidden');
-            } else {
-                litecoinButton.classList.add('hidden');
-            }
-
-            paymentModal.classList.remove('hidden');
-            nayapayInstructions.classList.add('hidden'); // Reset instructions
-            litecoinInstructions.classList.add('hidden'); // Reset instructions
-        }
-
-        window.closePaymentModal = () => {
-            paymentModal.classList.add('hidden');
-        }
-
-        window.showNotification = (title, message) => {
-            document.getElementById('notification-title').textContent = title;
-            document.getElementById('notification-message').textContent = message;
-            notificationModal.classList.remove('hidden');
-        }
-        
-        window.closeNotificationModal = () => {
-            notificationModal.classList.add('hidden');
-        }
-
-        async function processOrder(paymentMethod) {
-            if (!db) { showNotification("Error", "Database not connected."); return; }
-
-            const buyerEmailInput = document.getElementById('buyer-email');
-            if (!buyerEmailInput.value || !buyerEmailInput.checkValidity()) {
-                showNotification("Input Required", "Please enter a valid email address.");
-                buyerEmailInput.focus();
-                return;
-            }
-
-            const orderData = {
-                buyerEmail: buyerEmailInput.value,
-                serviceName: currentService.serviceName,
-                price: currentService.price,
-                paymentMethod: paymentMethod,
-                createdAt: serverTimestamp()
-            };
-
-            try {
-                await addDoc(collection(db, "orders"), orderData);
-                
-                if (paymentMethod === 'Skrill') {
-                    closePaymentModal();
-                    const skrillWindow = window.open(currentService.skrillLink, '_blank');
-                    if (!skrillWindow || skrillWindow.closed || typeof skrillWindow.closed == 'undefined') {
-                        showNotification('Pop-up Blocked', 'Your browser may have blocked the payment window. Please allow pop-ups for this site to complete the payment.');
-                    } else {
-                        showNotification('Order Placed!', `Thank you for your order. You are being redirected to Skrill.`);
-                    }
-                } else {
-                    showNotification('Order Logged', 'Your order has been recorded. Please follow the payment instructions.');
-                }
-            } catch (error) {
-                console.error("Error creating order: ", error);
-                showNotification("Error", "There was an error processing your order. Please try again.");
-            }
-        }
-
-        skrillButton.addEventListener('click', () => processOrder('Skrill'));
-        
-        nayapayButton.addEventListener('click', () => {
-            nayapayInstructions.classList.remove('hidden');
-            litecoinInstructions.classList.add('hidden');
-            processOrder('NayaPay');
-        });
-
-        litecoinButton.addEventListener('click', () => {
-            litecoinInstructions.classList.remove('hidden');
-            nayapayInstructions.classList.add('hidden');
-            processOrder('Litecoin');
-        });
-
-
-        // --- Animation Logic ---
-        const scrollObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('is-visible');
-                }
-            });
-        }, { threshold: 0.1 });
-
-        function setupScrollAnimations(container) {
-            const elementsToAnimate = container.querySelectorAll('.animate-on-scroll');
-            elementsToAnimate.forEach(el => {
-                el.classList.remove('is-visible');
-                scrollObserver.observe(el);
-            });
-        }
-        
-        window.addEventListener('scroll', () => {
-            document.querySelector('header').classList.toggle('scrolled', window.scrollY > 50);
-        });
-
-        // --- Initial Load & Loader Logic ---
+    <!-- JavaScript for Single-Page Application (SPA) navigation and Cookie Consent -->
+    <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const loader = document.getElementById('loader');
-            const app = document.getElementById('app');
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const allPages = document.querySelectorAll('.page');
+            const allNavLinks = document.querySelectorAll('a');
+            const cookieBanner = document.getElementById('cookie-banner');
+            const acceptCookiesBtn = document.getElementById('accept-cookies');
+            const declineCookiesBtn = document.getElementById('decline-cookies');
+            const searchInput = document.getElementById('search-input');
+            const searchButton = document.getElementById('search-button');
+            const blogPostListings = document.getElementById('blog-post-listings');
+            const noResultsMessage = document.getElementById('no-results-message');
 
-            setTimeout(() => {
-                loader.classList.add('hidden');
-                app.classList.add('loaded');
+            // --- Search Functionality ---
+            function performSearch() {
+                const query = searchInput.value.toLowerCase().trim();
+                const allCards = blogPostListings.querySelectorAll('.blog-post-card');
+                let resultsFound = false;
+
+                allCards.forEach(card => {
+                    const pageId = card.getAttribute('data-page-id');
+                    const pageContent = document.getElementById('page-' + pageId).textContent.toLowerCase();
+                    
+                    if (pageContent.includes(query)) {
+                        card.style.display = 'block';
+                        resultsFound = true;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                if (resultsFound) {
+                    noResultsMessage.classList.add('hidden');
+                } else {
+                    noResultsMessage.classList.remove('hidden');
+                }
+            }
+
+            searchButton.addEventListener('click', performSearch);
+            searchInput.addEventListener('keyup', (event) => {
+                if (event.key === 'Enter') {
+                    performSearch();
+                } else if (searchInput.value.trim() === '') {
+                    // Show all cards if search is cleared
+                    const allCards = blogPostListings.querySelectorAll('.blog-post-card');
+                    allCards.forEach(card => card.style.display = 'block');
+                    noResultsMessage.classList.add('hidden');
+                }
+            });
+
+
+            // --- Cookie Consent Logic ---
+            function setCookie(name, value, days) {
+                let expires = "";
+                if (days) {
+                    const date = new Date();
+                    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                    expires = "; expires=" + date.toUTCString();
+                }
+                document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+            }
+
+            function getCookie(name) {
+                const nameEQ = name + "=";
+                const ca = document.cookie.split(';');
+                for(let i = 0; i < ca.length; i++) {
+                    let c = ca[i];
+                    while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                    if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+                }
+                return null;
+            }
+
+            if (!getCookie('cookie_consent')) {
+                cookieBanner.classList.remove('hidden');
+                setTimeout(() => cookieBanner.classList.remove('opacity-0'), 100);
+            }
+
+            acceptCookiesBtn.addEventListener('click', () => {
+                setCookie('cookie_consent', 'true', 365);
+                cookieBanner.classList.add('opacity-0');
+                setTimeout(() => cookieBanner.classList.add('hidden'), 500);
+            });
+
+            declineCookiesBtn.addEventListener('click', () => {
+                setCookie('cookie_consent', 'false', 365);
+                cookieBanner.classList.add('opacity-0');
+                setTimeout(() => cookieBanner.classList.add('hidden'), 500);
+            });
+
+
+            // --- Page Navigation Logic ---
+            function showPage(pageId) {
+                // Default to 'home' if pageId is empty, null, or just '#'
+                const targetId = (pageId && pageId !== '#') ? pageId : 'home';
+
+                // Hide all pages
+                allPages.forEach(page => {
+                    page.classList.remove('active');
+                });
+
+                // Show the target page
+                const targetPage = document.getElementById('page-' + targetId);
+                if (targetPage) {
+                    targetPage.classList.add('active');
+                } else {
+                    // Fallback to home page if the target doesn't exist
+                    document.getElementById('page-home').classList.add('active');
+                }
                 
-                setTimeout(() => {
-                    loader.style.display = 'none';
-                    setupScrollAnimations(document.body);
-                }, 500); // Match CSS transition duration
+                // Scroll to the top of the window
+                window.scrollTo(0, 0);
+            }
 
-            }, 3500); // 3.5 second delay
-        });
-        
-        // --- Fast Delivery Logic ---
-        window.toggleFastDelivery = (tier, checkbox) => {
-            const deliveryOptions = {
-                'starter': { basePrice: 60, fastPrice: 75, baseDelivery: '4-day delivery', fastDelivery: '3-day delivery', baseLink: 'https://skrill.me/rq/Nisar%20Ud/60/USD?key=1VDpundqNXS3XPYlg8hxEAGo7zC', fastLink: 'https://skrill.me/rq/Nisar%20Ud/75/USD?key=GXCjx9DawBnwkaANfaM1CXXTGzw', serviceName: 'Starter Ads Setup' },
-                'growth': { basePrice: 170, fastPrice: 185, baseDelivery: '4‑day management', fastDelivery: '3-day management', baseLink: 'https://skrill.me/rq/Nisar%20Ud/170/USD?key=_DFkSpAHspH9D4X_se04ufxp7HS', fastLink: 'https://skrill.me/rq/Nisar%20Ud/185/USD?key=5FBORg69D7D9Cx_P3CYuymbLHwM', serviceName: 'Growth Accelerator' },
-                'pro': { basePrice: 325, fastPrice: 340, baseDelivery: '4-day delivery', fastDelivery: '3-day delivery', baseLink: 'https://skrill.me/rq/Nisar%20Ud/325/USD?key=wDg-m8alxlsEFlAvAciKXcLoaA0', fastLink: 'https://skrill.me/rq/Nisar%20Ud/340/USD?key=4coYGuDF2D8H9bCXcB-x_R0fb1h', serviceName: 'Brand Reach Pro' },
-                'product-standard': { basePrice: 20, fastPrice: 30, baseDelivery: '2-day delivery', fastDelivery: '1-day delivery', baseLink: 'https://skrill.me/rq/Nisar%20Ud/20/USD?key=tkKjTlqtP8fMhiH8Fx4MIdZ0_Ln', fastLink: 'https://skrill.me/rq/Nisar%20Ud/30/USD?key=PqziVlJJZKcuPWOlr0g97LmkWdT', serviceName: 'Product Listing & Improvement' },
-                'product-premium': { basePrice: 25, fastPrice: 35, baseDelivery: '3-day delivery', fastDelivery: '2-day delivery', baseLink: 'https://skrill.me/rq/Nisar%20Ud/25/USD?key=KNminP-egUoMX_2Cxw4OPH4UNDH', fastLink: 'https://skrill.me/rq/Nisar%20Ud/35/USD?key=j8l0gdst9xBi6XH9uzLNTnM6pCh', serviceName: 'Listing Boost + Extra Perks' },
-                'discord-standard': { basePrice: 10, fastPrice: 15, baseDelivery: '2-day delivery', fastDelivery: '1-day delivery', baseLink: 'https://skrill.me/rq/Nisar%20Ud/10/USD?key=E7gI_4kzRNlQc3RiNrHeXBnj-bh', fastLink: 'https://skrill.me/rq/Nisar%20Ud/15/USD?key=RxmENPW3ge6q8Tj5fRZ97JwtFsy', serviceName: 'Discord Standard' },
-                'discord-premium': { basePrice: 20, fastPrice: 25, baseDelivery: '3-day delivery', fastDelivery: '2-day delivery', baseLink: 'https://skrill.me/rq/Nisar%20Ud/20/USD?key=FoyeSmlaMukYaiOc3v-jzEE6-Bs', fastLink: 'https://skrill.me/rq/Nisar%20Ud/25/USD?key=F603vu2YGGKpU0720rGD45UHCHB', serviceName: 'Discord Premium' }
-            };
+            // --- Event Listeners ---
+            function handleNavigation(event) {
+                const link = event.currentTarget;
+                // Only prevent default for internal hash links
+                if (link.hash) {
+                    event.preventDefault();
+                    const pageId = link.hash.substring(1);
+                    showPage(pageId);
+                    // Update the URL hash manually
+                    window.location.hash = pageId;
+                }
+            }
 
-            const options = deliveryOptions[tier];
-            if (!options) return;
+            // Add click listeners to all links
+            allNavLinks.forEach(link => {
+                if (link.href.includes('#')) {
+                     link.addEventListener('click', handleNavigation);
+                }
+            });
 
-            const priceEl = document.getElementById(`${tier}-price`);
-            const deliveryEl = document.getElementById(`${tier}-delivery`);
-            const buttonEl = document.getElementById(`${tier}-button`);
-
-            const isFast = checkbox.checked;
-            const price = isFast ? options.fastPrice : options.basePrice;
-            const delivery = isFast ? options.fastDelivery : options.baseDelivery;
-            const link = isFast ? options.fastLink : options.baseLink;
-            const serviceName = isFast ? `${options.serviceName} (Fast Delivery)` : options.serviceName;
-
-            priceEl.textContent = price;
-            if (deliveryEl) deliveryEl.textContent = delivery;
+            // Handle back/forward browser button navigation
+            window.addEventListener('popstate', () => {
+                const pageId = window.location.hash.substring(1);
+                showPage(pageId);
+            });
             
-            // Update the onclick attribute of the button
-            buttonEl.setAttribute('onclick', `showPaymentModal('${serviceName}', ${price}, '${link}')`);
-        };
+            // Show initial page on load
+            const initialPageId = window.location.hash.substring(1);
+            showPage(initialPageId);
 
+
+            // --- Mobile Menu Logic ---
+            mobileMenuButton.addEventListener('click', (event) => {
+                event.stopPropagation();
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Close menu when a link is clicked
+            mobileMenu.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+
+            // Close menu if clicking outside
+            document.addEventListener('click', (event) => {
+                if (!mobileMenu.contains(event.target) && !mobileMenuButton.contains(event.target)) {
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+        });
     </script>
-    
-    <!--Start of Tawk.to Script-->
-    <script type="text/javascript">
-    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-    (function(){
-    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-    s1.async=true;
-    s1.src='https://embed.tawk.to/6873fa4c359126190c0bf405/1j02gjf9k';
-    s1.charset='UTF-8';
-    s1.setAttribute('crossorigin','*');
-    s0.parentNode.insertBefore(s1,s0);
-    })();
-    </script>
-    <!--End of Tawk.to Script-->
 
 </body>
 </html>
